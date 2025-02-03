@@ -1,0 +1,100 @@
+---
+# generate the installer template and copy it to target
+# if we are deploying a larger config, we will not run the hub installer as it gets managed from here
+# launch the installer
+
+
+- name: "Discover the extracted content directory"
+  ansible.builtin.find:
+    paths: "{{ platform_installer_config.aap_destination_dir }}"
+    pattern: "*setup*"
+    file_type: "directory"
+  register: result
+
+- name: "Assign the inventory directory name"
+  ansible.builtin.set_fact:
+    aap_installer_inventory_dir: "{{ result.files[0].path }}"
+
+- name: "Log installer inventory directory"
+  ansible.builtin.debug:
+    var: aap_installer_inventory_dir
+
+- name: "Determine inventory template for deployment"
+  when: platform_installer
+  block:
+
+    - name: "Choose the growth container template"
+      when:
+        - platform_installer_config.topology == "growth"
+        - platform_installer_config.deployment_type == "container"
+      ansible.builtin.set_fact:
+        inventory_template_name: "growth_topology_container_inventory.j2"
+
+    - name: "Choose the enterprise container template"
+      when:
+        - platform_installer_config.topology == "enterprise"
+        - platform_installer_config.deployment_type == "container"
+      ansible.builtin.set_fact:
+        inventory_template_name: "enterprise_topology_container_inventory.j2"
+
+    - name: "Choose the standalone container template"
+      when:
+        - platform_installer_config.topology == "standalone"
+        - platform_installer_config.deployment_type == "container"
+      ansible.builtin.set_fact:
+        inventory_template_name: "standalone_topology_container_inventory.j2"
+
+
+    - name: "Choose the custom container template"
+      when:
+        - platform_installer_config.topology == "custom"
+        - platform_installer_config.deployment_type == "container"
+        - platform_installer_config.custom_inventory_template_path is defined
+      ansible.builtin.set_fact:
+        inventory_template_name: "{{ platform_installer_config.custom_inventory_template_path }}"
+
+    - name: "Choose the growth rpm template"
+      when:
+        - platform_installer_config.topology == "growth"
+        - platform_installer_config.deployment_type == "rpm"
+      ansible.builtin.set_fact:
+        inventory_template_name: "growth_topology_rpm_inventory.j2"
+
+    - name: "Choose the enterprise rpm template"
+      when:
+        - platform_installer_config.topology == "enterprise"
+        - platform_installer_config.deployment_type == "rpm"
+      ansible.builtin.set_fact:
+        inventory_template_name: "enterprise_topology_rpm_inventory.j2"
+
+    - name: "Choose the standalone rpm template"
+      when:
+        - platform_installer_config.topology == "standalone"
+        - platform_installer_config.deployment_type == "rpm"
+      ansible.builtin.set_fact:
+        inventory_template_name: "standalone_topology_rpm_inventory.j2"
+
+    - name: "Choose the standalone hub rpm template"
+      when:
+        - platform_installer_config.topology == "standalone_hub"
+        - platform_installer_config.deployment_type == "rpm"
+      ansible.builtin.set_fact:
+        inventory_template_name: "standalone_hub_topology_rpm_inventory.j2"
+
+    - name: "Choose the custom rpm template"
+      when:
+        - platform_installer_config.topology == "custom"
+        - platform_installer_config.deployment_type == "rpm"
+        - platform_installer_config.custom_inventory_template_path is defined
+      ansible.builtin.set_fact:
+        inventory_template_name: "{{ platform_installer_config.custom_inventory_template_path }}"
+
+    - name: "Building AAP platform with template:"
+      ansible.builtin.debug:
+        var: inventory_template_name
+
+    - name: "Template the AAP installer configuration"
+      ansible.builtin.template:
+        src: "{{ inventory_template_name }}"
+        dest: "{{ aap_installer_inventory_dir }}/inventory"
+        mode: "0640"

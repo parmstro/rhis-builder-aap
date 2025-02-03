@@ -1,0 +1,12 @@
+---
+# use cli to accept image terms for RHEL Marketplace/GoldImages
+
+- name: "Accept the terms of an image"
+  ansible.builtin.command: "az vm image terms accept --urn={{ image_urn }}"
+  register: result
+  changed_when: result.accepted
+
+- name: "Assert the terms were accepted"
+  ansible.builtin.assert:
+    that: "{{ result.accepted }}"
+    fail_msg: "Azure terms acceptance request failed with {{ result }}"

@@ -1,0 +1,19 @@
+---
+
+- name: "Ensure ansible-core"
+  ansible.builtin.dnf:
+    name:
+      - "ansible-core"
+    state: "present"
+
+
+- name: "Ensure supporting packages"
+  ansible.builtin.dnf:
+    name:
+      - "wget"
+      - "git-core"
+      - "rsync"
+      - "vim"
+      - "bzip2"
+      - "gzip"
+    state: "present"

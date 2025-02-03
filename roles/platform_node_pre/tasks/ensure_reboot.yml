@@ -1,0 +1,21 @@
+---
+
+# call shutdown -r with a timeout value as specified
+- name: "A reboot has been requested for {{ anisble_fqdn }}"
+  ansible.builtin.command: "shutdown -r +{{ platform_node_pre_reboot_timeout }}"
+  register: shutdown_result
+  changed_when: shutdown_result.rc == 0
+
+- name: "REBOOT PENDING"
+  ansible.builtin.debug:
+    msg: "System {{ ansible_fqdn }} will go down for reboot in {{ platform_node_pre_reboot_timeout }} minutes."
+
+- name: "Monitoring for successful reboot."
+  ansible.builtin.wait_for:
+    timeout: 7200
+    sleep: 60
+    port: 22
+    delay: "{{ platform_node_pre_reboot_timeout * 60 + 120 }}"
+    host: "{{ ansible_fqdn }}"
+    search_regex: "OpenSSH"
+  delegate_to: localhost

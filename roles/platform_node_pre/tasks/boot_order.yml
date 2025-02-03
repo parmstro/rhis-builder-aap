@@ -1,0 +1,62 @@
+---
+
+# This task re-orders the UEFI boot order based on a defined list.
+#
+
+- name: "Get the boot configuration"
+  ansible.builtin.command: "efibootmgr"
+  register: boot_config
+  changed_when: boot_config.rc == 0
+
+- name: "Get the current boot order list with labels"
+  ansible.builtin.set_fact:
+    boot_order: "{{ boot_config.stdout_lines[3:88] }}"
+
+- name: "Log the boot_order"
+  ansible.builtin.debug:
+    msg: "{{ item }}"
+  loop: "{{ boot_order }}"
+
+- name: "Define the new boot order"
+  ansible.builtin.set_fact:
+    new_boot_order: "{{ platform_node_pre_preferred_boot_order }}"
+
+- name: "Log the boot_order"
+  ansible.builtin.debug:
+    var: item
+  loop: "{{ new_boot_order }}"
+
+- name: "Generate the new boot config list"
+  ansible.builtin.set_fact:
+    new_config_list: |
+      {% filter flatten %}
+      [{% for searchstring in new_boot_order %}
+      {{ boot_order | select('search', searchstring) }},
+      {% endfor %}]
+      {% endfilter %}
+
+- name: "Log the config list"
+  ansible.builtin.debug:
+    var: new_config_list
+
+- name: "Create a placeholder"
+  ansible.builtin.set_fact:
+    new_boot_ids: []
+
+- name: "Get the items"
+  ansible.builtin.set_fact:
+    new_boot_ids: "{{ new_boot_ids + [item[4:8]] }}"
+  loop: "{{ new_config_list }}"
+
+- name: "Generate the id order"
+  ansible.builtin.set_fact:
+    new_boot_order: "{{ new_boot_ids | join(',') }}"
+
+- name: "Set the new boot order"
+  ansible.builtin.command: "efibootmgr -o {{ new_boot_order }}"
+  register: efibootmgr_result
+  changed_when: efibootmgr_result.rc == 0
+
+- name: "Log the boot ids"
+  ansible.builtin.debug:
+    var: efibootmgr_result.stdout_lines

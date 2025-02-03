@@ -1,0 +1,7 @@
+---
+
+- name: "Extract the archive file"
+  ansible.builtin.unarchive:
+    src: "{{ platform_installer_config.aap_destination_dir }}/{{ platform_installer_config.aap_bundle_file }}"
+    dest: "{{ platform_installer_config.aap_destination_dir }}"
+    remote_src: true

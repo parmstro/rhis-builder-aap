@@ -1,0 +1,50 @@
+---
+# - name: "Ensure the node exists in the workflow"
+#   ansible.controller.workflow_job_template_node:
+#     controller_host: "aapcontroller24.parmstrong.ca"
+#     controller_username: "admin"
+#     controller_password: "#Legend2013"
+#     identifier: "TestNode"
+#     organization: "Default"
+#     unified_job_template: "AMC8FPowerOffTestServers"
+#     workflow: "SOE_ContentDeliveryPipeline"
+#     state: present
+#     validate_certs: "true"
+
+
+- name: Create a workflow approval node
+  ansible.controller.workflow_job_template_node:
+    controller_host: "aapcontroller24.parmstrong.ca"
+    controller_username: "admin"
+    controller_password: "#Legend2013"
+    identifier: approval_test
+    workflow: "SOE_ContentDeliveryPipeline"
+    organization: "Default"
+    approval_node:
+      name: "approval_test"
+      description: "Test the approval"
+      timeout: 900
+
+- name: Connect delete snap to approval node
+  ansible.controller.workflow_job_template_node:
+    controller_host: "aapcontroller24.parmstrong.ca"
+    controller_username: "admin"
+    controller_password: "#Legend2013"
+    identifier: "DeleteSnapshot"
+    workflow: "SOE_ContentDeliveryPipeline"
+    organization: "Default"
+    success_nodes:
+      - "approval_test"
+    failure_nodes:
+      - "PowerOffHosts"
+
+- name: Connect delete snap to approval node
+  ansible.controller.workflow_job_template_node:
+    controller_host: "aapcontroller24.parmstrong.ca"
+    controller_username: "admin"
+    controller_password: "#Legend2013"
+    identifier: "approval_test"
+    workflow: "SOE_ContentDeliveryPipeline"
+    organization: "Default"
+    success_nodes:
+      - "DeleteHosts"

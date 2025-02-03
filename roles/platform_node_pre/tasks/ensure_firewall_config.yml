@@ -1,0 +1,23 @@
+---
+# Default configuration for hub enables 80/tcp + 443/tcp on the default zone
+# Our default zone is drop. Need to remove them from drop and add them to public
+
+- name: "Reconfigure default firewalld settings"
+  block:
+    - name: "Add to the service or port to public"
+      ansible.posix.firewalld:
+        service: "{{ fwrule.service | default(omit) }}"
+        port: "{{ fwrule.port | default(omit) }}"
+        zone: "public"
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: "Remove the service or port from drop"
+      ansible.posix.firewalld:
+        service: "{{ fwrule.service | default(omit) }}"
+        port: "{{ fwrule.port | default(omit) }}"
+        zone: "drop"
+        permanent: true
+        immediate: true
+        state: disabled

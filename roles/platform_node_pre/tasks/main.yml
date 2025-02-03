@@ -1,0 +1,49 @@
+---
+# This role assumes that the hosts already exist
+# Use platform_node_build to cause the provisioner node to build the hosts using satellite
+# There are few prerequisites. Software dependencies are pulled by the installers
+
+- name: "Configure the node prerequisites"
+  block:
+
+    - name: "Ensure volumes characteristics, if required"
+      when: platform_node_pre_storage is defined
+      ansible.builtin.include_tasks: "ensure_volume.yml"
+      loop: "{{ platform_node_pre_storage }}"
+      loop_control:
+        loop_var: volume
+      no_log: true
+
+    # The default umask on a RHEL system is 022
+    # We are building from scratch so this should be so
+
+    - name: "Ensure the firewall configuration, if required"
+      when: platform_node_pre_firewall is defined
+      ansible.builtin.include_tasks: "ensure_firewall_config.yml"
+      loop: "{{ platform_node_pre_firewall }}"
+      loop_control:
+        loop_var: fwrule
+      no_log: true
+
+    - name: "Ensure the certificate configuration, if required"
+      when: platform_node_pre_certificates is defined
+      ansible.builtin.include_tasks: "ensure_ssl_config.yml"
+      loop: "{{ platform_node_pre_certificates }}"
+      loop_control:
+        loop_var: ssl_config
+      no_log: true
+
+    - name: "Ensure the container tools are installed"
+      when: platform_deployment_type == "container"
+      ansible.builtin.include_tasks: "ensure_container_tools.yml"
+
+    - name: "Ensure the container tools are installed"
+      ansible.builtin.include_tasks: "ensure_packages.yml"
+
+    - name: "Ensure cockpit is installed and configured"
+      when: platform_node_pre_certificates is defined
+      ansible.builtin.include_tasks: "ensure_cockpit.yml"
+
+    - name: "Ensure Satellite provisioned system boots from UEFI Network first"
+      when: platform_node_pre_preferred_boot_order is defined
+      ansible.builtin.include_tasks: "boot_order.yml"

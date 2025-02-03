@@ -1,0 +1,45 @@
+---
+
+# prepare to generate the installer template and copy it to target
+# launch the installer
+- name: "Ensure the .ssh directory exists"
+  ansible.builtin.file:
+    path: "/root/.ssh/"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0600"
+
+- name: "Copy the builder key to the aap host"
+  ansible.builtin.copy:
+    src: "{{ builder_key_file_vault }}"
+    dest: "/root/.ssh/id_rsa"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+
+- name: "Copy the builder public key to the aap host"
+  ansible.builtin.copy:
+    src: "{{ builder_pub_file_vault }}"
+    dest: "/root/.ssh/id_rsa.pub"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+
+- name: "Create an authorized key file on the aap host"
+  ansible.builtin.copy:
+    src: "{{ builder_authorized_keys_file_vault }}"
+    dest: "/root/.ssh/authorized_keys"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+
+- name: "Test the connection"
+  ansible.builtin.command: "ssh -o StrictHostKeyChecking=no {{ ansible_fqdn }} 'echo Killroy_was_here'"
+  delegate_to: "{{ groups['platform_installer'][0] }}"
+  register: result
+  changed_when: result.rc == 0
+
+- name: "Assert we were there"
+  ansible.builtin.assert:
+    that: result.stdout == "Killroy_was_here"

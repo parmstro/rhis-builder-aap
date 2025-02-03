@@ -1,0 +1,16 @@
+---
+# Add the statically defined hosts to the controller
+
+- name: "Ensure that host {{ host.name }} is {{ host.state }}"  # noqa name[template]
+  ansible.controller.host:
+    controller_host: "{{ aap_platform_host }}"
+    controller_username: "{{ aap_platform_username }}"
+    controller_password: "{{ aap_platform_password }}"
+    description: "{{ host.description | default(omit) }}"
+    enabled: "{{ host.enabled | default('enabled') }}"
+    inventory: "{{ host.inventory }}"
+    name: "{{ host.name }}"
+    new_name: "{{ host.new_name | default(omit) }}"
+    state: "{{ host.state | default('present') }}"
+    validate_certs: "{{ aap_validate_certs }}"
+    variables: "{{ host.variables | default(omit) }}"

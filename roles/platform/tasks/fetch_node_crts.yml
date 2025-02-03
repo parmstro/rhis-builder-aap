@@ -1,0 +1,10 @@
+---
+
+# pull the custom cert directories to the installer system
+
+- name: "Fetch the certs from the hosts for the installer"
+  ansible.builtin.command:
+    cmd: "scp -r {{ ansible_fqdn }}:/etc/ipa/private/* /etc/ipa/private/"
+  delegate_to: "{{ groups['platform_installer'][0] }}"
+  register: result
+  changed_when: result.rc == 0

@@ -1,0 +1,28 @@
+---
+- name: "Ensure Log Directory"
+  ansible.builtin.file:
+    path: "/var/log/tower"
+    state: directory
+    mode: "0600"
+
+- name: "Launching installer"
+  ansible.builtin.debug:
+    msg: "Please be patient. This will take 10-30 minutes depending on the configuration."
+
+- name: "Run the AAP container based installation as the ansible user"
+  when:
+    - platform_installer_config.deployment_type == "container"
+  ansible.builtin.command:
+    chdir: "{{ aap_installer_inventory_dir }}"
+    cmd: "ansible-playbook -i inventory ansible.containerized_installer.install"
+  register: installer_result
+  changed_when: installer_result.rc == 0
+
+- name: "Run the AAP rpm based installation"
+  when:
+    - platform_installer_config.deployment_type == "rpm"
+  ansible.builtin.command:
+    chdir: "{{ aap_installer_inventory_dir }}"
+    cmd: "./setup.sh"
+  register: installer_result
+  changed_when: installer_result.rc == 0

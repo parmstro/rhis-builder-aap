@@ -1,0 +1,12 @@
+---
+
+## BE VERY SURE YOU WANT TO PUSH THE BUTTON
+## THERE IS NO GOING BACK... well you just rebuild with ansible...
+# except if it is your workstation you just wiped...
+# commented out for safety reasons
+
+# - name: "Launch the command"
+#   ansible.builtin.shell:
+#     cmd: 'dd if=/dev/zero of=/dev/sda bs=1M count=4096;dd if=/dev/zero of=/dev/sdb bs=1M count=4096;sync;shutdown -r +1;'
+#   register: result
+#   changed_when: result.rc == 0

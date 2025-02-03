@@ -1,0 +1,33 @@
+---
+# get the installer files and deploy
+- name: "Download latest AAP installer"
+  ansible.builtin.include_tasks:
+    file: "download_content.yml"
+
+- name: "Extract installer"
+  ansible.builtin.include_tasks:
+    file: "extract_aap_installer.yml"
+
+- name: "Template install config"
+  ansible.builtin.include_tasks:
+    file: "generate_installer_template.yml"
+
+- name: "Ensure that the ssh user for installation has access"
+  ansible.builtin.include_tasks:
+    file: "ensure_ssh_user.yml"
+
+- name: "Launch installer"
+  ansible.builtin.include_tasks:
+    file: "launch_installer.yml"
+
+- name: "Download the subscriptions manifest"
+  ansible.builtin.include_tasks:
+    file: "fetch_manifest.yml"
+
+- name: "Add the subscriptions to the controller"
+  ansible.builtin.include_tasks:
+    file: "add_aap_manifest.yml"
+
+- name: "Ensure that the ssh user for installation has access"
+  ansible.builtin.include_tasks:
+    file: "ensure_ssh_user_cleanup.yml"

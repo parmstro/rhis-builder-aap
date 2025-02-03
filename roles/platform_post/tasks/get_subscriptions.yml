@@ -1,0 +1,10 @@
+---
+# Apply a given setting to a target AAP server
+
+- name: "Get the subscriptions"
+  ansible.controller.subscriptions:
+    controller_host: "aapcontroller24.parmstrong.ca"
+    controller_username: "admin"
+    controller_password: "#Legend2013"
+    username: "admin"
+    password: "#Legend2013"

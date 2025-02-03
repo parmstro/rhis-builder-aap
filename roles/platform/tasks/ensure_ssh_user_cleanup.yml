@@ -1,0 +1,16 @@
+---
+
+# prepare to generate the installer template and copy it to target
+# launch the installer
+- name: "Ensure the .ssh directory exists"
+  ansible.builtin.file:
+    path: "/root/.ssh/"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0600"
+
+- name: "Deauthorize ssh key login on the aap host"
+  ansible.builtin.file:
+    path: "/root/.ssh/authorized_keys"
+    state: absent

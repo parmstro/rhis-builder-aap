@@ -1,0 +1,27 @@
+---
+# Ensure that the workflow node exists
+# Each workflow node should be an existing job template, workflow template, project sync, inventory sync or approval node
+
+- name: "Ensure the node exists in the workflow"
+  ansible.controller.workflow_job_template_node:
+    controller_host: "{{ aap_platform_host }}"
+    controller_username: "{{ aap_platform_username }}"
+    controller_password: "{{ aap_platform_password }}"
+    all_parents_must_converge: "{{ workflow_node.all_parents_must_converge | default(omit) }}"
+    always_nodes: "{{ workflow_node.related.always_nodes | default(omit) }}"
+    approval_node: "{{ workflow_node.approval_node | default(omit) }}"
+    credentials: "{{ workflow_node.credentials | default(omit) }}"
+    execution_environment: "{{ workflow_node.execution_environment | default(omit) }}"
+    extra_data: "{{ workflow_node.extra_data | default(omit) }}"
+    failure_nodes: "{{ workflow_node.related.failure_nodes | default(omit) }}"
+    inventory: "{{ workflow_node.inventory | default(omit) }}"
+    identifier: "{{ workflow_node.identifier }}"
+    job_type: "{{ workflow_node.job_type | default(omit) }}"
+    limit: "{{ workflow_node.limit | default(omit) }}"
+    organization: "{{ workflow_node.organization | default('Default') }}"
+    state: "{{ workflow_node.state | default(omit) }}"
+    success_nodes: "{{ workflow_node.related.success_nodes | default(omit) }}"
+    unified_job_template: "{{ workflow_node.unified_job_template | default(omit) }}"
+    workflow_job_template: "{{ workflow.name }}"
+    validate_certs: "{{ aap_validate_certs }}"
+    verbosity: "{{ workflow_node.verbosity | default(omit) }}"

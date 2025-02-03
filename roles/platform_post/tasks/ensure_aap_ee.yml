@@ -1,0 +1,56 @@
+---
+# Build and upload an ee
+- name: "Create the base directory"
+  ansible.builtin.file:
+    path: "{{ ee.git_dest }}"
+    state: directory
+    mode: "0644"
+
+- name: "Clone the git repo for the ee"
+  ansible.builtin.git:
+    repo: "{{ ee.git_repo }}"
+    version: "{{ ee.git_revision | default(omit) }}"
+    dest: "{{ ee.git_dest }}/{{ ee.name }}"
+    clone: "{{ ee.git_clone | default(omit) }}"
+    force: "{{ ee.git_force | default(omit) }}"
+
+- name: "Template the exec_envs definition"
+  ansible.builtin.template:
+    src: "execution-environment.yml.j2"
+    dest: "{{ ee.git_dest }}/{{ ee.name }}/execution-environment.yml"
+    mode: "0600"
+
+- name: "Get the satellite API certificate"
+  ansible.builtin.get_url:
+    url: "{{ satellite_server_url }}/pub/katello-server-ca.crt"
+    dest: "{{ ee.git_dest }}/{{ ee.name }}/katello-server-ca.crt"
+    mode: "0644"
+
+- name: "Add our ca certficate to the image"
+  ansible.builtin.copy:
+    src: "{{ ee.git_dest }}/{{ ee.name }}/katello-server-ca.crt"
+    dest: "{{ ee.git_dest }}/{{ ee.name }}/context"
+    mode: "0644"
+    remote_src: true
+
+- name: "Build the ee on the target os"
+  ansible.builtin.command: "ansible-builder build -t {{ ee.name }}"
+  args:
+    chdir: "{{ ee.git_dest }}/{{ ee.name }}"
+  register: build_result
+  changed_when: build_result.rc == 0
+
+- name: "Push the finished container to the hub"
+  containers.podman.podman_image:
+    name: "{{ ee.name }}"
+    push: true
+    username: "{{ aap_platform_username }}"
+    password: "{{ aap_platform_password }}"
+    push_args:
+      dest: "{{ groups['hubs'][0] }}"
+      remove_signatures: true
+
+- name: "Clean up the deployment directory"
+  ansible.builtin.file:
+    path: "{{ ee.git_dest }}/{{ ee.name }}"
+    state: absent

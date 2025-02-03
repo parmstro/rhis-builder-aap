@@ -1,0 +1,75 @@
+---
+# This module downloads content from the Satellite
+# hammer --output json repository info /
+#        --name "Red Hat Ansible Automation Platform 2.5 for RHEL 8 x86_64 Files" /
+#        --product "Red Hat Ansible Automation Platform" /
+#        --organization "Default Organization" /
+#        --fields "Published At"
+
+- name: "Prepare the installer node"
+  when: platform_installer
+  block:
+
+    - name: "Get the file repository info"
+      redhat.satellite.repository_info:
+        username: "{{ satellite_admin_username }}"
+        password: "{{ satellite_admin_password }}"
+        server_url: "{{ satellite_server_url }}"
+        organization: "{{ satellite_organization }}"
+        validate_certs: "{{ satellite_validate_certs }}"
+        name: "{{ platform_installer_config.aap_file_repo_name }}"
+        product: "{{ platform_installer_config.aap_product }}"
+      register: result
+
+    - name: "Determine the base url"
+      ansible.builtin.set_fact:
+        software_baseurl: "{{ result.repository.full_path }}"
+
+    - name: "Get the name of the bundle file"
+      redhat.satellite.resource_info:
+        username: "{{ satellite_admin_username }}"
+        password: "{{ satellite_admin_password }}"
+        server_url: "{{ satellite_server_url }}"
+        organization: "{{ satellite_organization }}"
+        validate_certs: "{{ satellite_validate_certs }}"
+        resource: file_units
+        search: "name ~ {{ platform_installer_config.aap_bundle_file }}"
+      register: files
+
+    - name: "Set the download checksum"
+      ansible.builtin.set_fact:
+        sha256sum: "{{ files.resources[0].checksum }}"
+
+    - name: "Set the path for the download"
+      ansible.builtin.set_fact:
+        download_path: "{{ software_baseurl }}{{ files.resources[0].name }}"
+
+    - name: "Preparing to download:"
+      ansible.builtin.debug:
+        var: download_path
+
+    - name: "Ensure the destination directory exists"
+      ansible.builtin.file:
+        path: "{{ platform_installer_config.aap_destination_dir }}"
+        state: directory
+        mode: "0744"
+
+    - name: "Clean up any failed downloads"
+      ansible.builtin.file:
+        path: "{{ platform_installer_config.aap_destination_dir }}/{{ platform_installer_config.aap_bundle_file }}"
+        state: absent
+
+    # get_url consistently borks the file on download. using curl
+    - name: "Download the file" # noqa command-instead-of-module
+      ansible.builtin.command: "curl -o {{ platform_installer_config.aap_destination_dir }}/{{ platform_installer_config.aap_bundle_file }} {{ download_path }}"
+      register: download_result
+      changed_when: download_result.rc == 0
+
+    - name: "Checksum the download"
+      ansible.builtin.command: "sha256sum {{ platform_installer_config.aap_destination_dir }}/{{ platform_installer_config.aap_bundle_file }}"
+      register: download_sum
+      changed_when: download_sum.rc == 0
+
+    - name: "Validate the checksum"
+      ansible.builtin.assert:
+        that: download_sum.stdout[:64] == sha256sum

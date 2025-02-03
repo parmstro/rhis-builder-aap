@@ -1,0 +1,75 @@
+---
+
+- name: "Install and configure cockpit"
+  ansible.builtin.dnf:
+    name:
+      - "cockpit"
+      - "cockpit-files"
+      - "cockpit-podman"
+      - "cockpit-storaged"
+      - "cockpit-system"
+      - "subscription-manager-cockpit"
+
+- name: "Ensure that cockpit is started"
+  ansible.builtin.service:
+    name: cockpit.socket
+    enabled: true
+    state: started
+
+- name: "Ensure that the firewall is open"
+  ansible.builtin.service:
+    name: firewalld
+    enabled: true
+    state: started
+
+- name: "Ensure that the firewall is open"
+  ansible.posix.firewalld:
+    immediate: true
+    permanent: true
+    service: cockpit
+    state: enabled
+
+- name: "Clean up our files in the cockpit cert directory"
+  ansible.builtin.file:
+    path: "/etc/cockpit/ws-cert/z-*"
+    state: absent
+
+- name: "Copy the crt to cockpit cert directory"
+  ansible.builtin.copy:
+    src: "{{ platform_node_pre_ssl_certs_dir }}/{{ ansible_fqdn }}.crt"
+    dest: "{{ platform_node_pre_cockpit_certs_dir }}/z-{{ ansible_fqdn }}.crt"
+    remote_src: true
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: "Copy the key to cockpit cert directory"
+  ansible.builtin.copy:
+    src: "{{ platform_node_pre_ssl_certs_dir }}/{{ ansible_fqdn }}.key"
+    dest: "{{ platform_node_pre_cockpit_certs_dir }}/z-{{ ansible_fqdn }}.key"
+    remote_src: true
+    owner: "root"
+    group: "root"
+    mode: "0600"
+
+- name: "Update the sssd.conf file to allow AD logins to proceed"
+  ansible.builtin.blockinfile:
+    path: "/etc/sssd/sssd.conf"
+    block: |
+      default_shell = /bin/bash
+      override_shell = /bin/bash
+      override_homedir = /home/%u
+      fallback_homedir = /home/%u
+    backup: true
+    insertbefore: '\[sssd\]'
+    marker: "### ANSIBLE MANAGED BLOCK - for AD user access ###"
+
+- name: "Restart sssd Service"
+  ansible.builtin.service:
+    name: sssd
+    state: restarted
+
+- name: "Restart cockpit"
+  ansible.builtin.service:
+    name: cockpit.socket
+    state: restarted

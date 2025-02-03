@@ -1,0 +1,13 @@
+---
+# Install the container tools on the host
+
+- name: "Ensure container tools and related packages are installed"
+  ansible.builtin.dnf:
+    name:
+      - "container-tools"
+      - "systemd-container"
+      - "udica"
+      - "bootc"
+      - "containers-common"
+      - "conmon"
+    state: present
