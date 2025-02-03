@@ -1,0 +1,23 @@
+---
+
+- name: "Run Role Task"
+  hosts: all
+  become: true
+  connection: local
+  gather_facts: true
+
+  tasks:
+
+    - name: "Load the vault variables"
+      when: vault_path is defined
+      ansible.builtin.include_vars:
+        file: "{{ vault_path }}"
+
+    - name: "Load the other variables"
+      when: vars_file is defined or vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir | default(omit) }}"
+        file: "{{ vars_file | default(omit) }}"
+
+    - name: "Run the role task {{ role_name }}/{{ task_name }}" # noqa name[template]
+      ansible.builtin.include_tasks: roles/{{ role_name }}/tasks/{{ task_name }}.yml

@@ -1,0 +1,19 @@
+---
+# These are the collections required by the builder
+collections:
+  - name: "ansible.controller"
+    version: "4.5.7"
+  - name: "ansible.netcommon"
+  - name: "ansible.posix"
+  - name: "ansible.utils"
+  - name: "azure.azcollection"
+  - name: "community.general"
+  - name: "community.vmware"
+  - name: "community.aws"
+  - name: "containers.podman"
+  - name: "redhat.rhel_idm"
+  - name: "redhat.rhel_system_roles"
+  - name: "redhat.satellite"
+  - name: "redhat.satellite_operations"
+  - name: "redhat.redhat_csp_download"
+

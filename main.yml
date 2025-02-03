@@ -1,0 +1,107 @@
+---
+# we are building all hosts with satellite compute resources
+
+- name: "Create hosts"
+  hosts: provisioner
+  become: true
+
+  tasks:
+
+    - name: "Load the vault variables"
+      connection: local
+      ansible.builtin.include_vars:
+        file: "{{ vault_path }}"
+
+    - name: "Load the other variables"
+      connection: local
+      when: vars_file is defined or vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir | default(omit) }}"
+        file: "{{ vars_file | default(omit) }}"
+
+    - name: "Build the ansible platform nodes"
+      ansible.builtin.include_role:
+        name: platform_node_build
+      tags:
+        - tags_phase_4
+        - tags_platform
+        - tags_platform_provisioner
+
+
+- name: "Apply installation prequisites to hosts"
+  hosts: 'all:!provisioner'
+  become: true
+
+  tasks:
+
+    - name: "Load the vault variables"
+      connection: local
+      ansible.builtin.include_vars:
+        file: "{{ vault_path }}"
+
+    - name: "Load the other variables"
+      connection: local
+      when: vars_file is defined or vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir | default(omit) }}"
+        file: "{{ vars_file | default(omit) }}"
+
+    - name: "Set up the prerequesites for the nodes"
+      ansible.builtin.include_role:
+        name: platform_node_pre
+      tags:
+        - tags_phase_4
+        - tags_platform
+        - tags_all_nodes
+
+- name: "Install the Ansible Automation Platform"
+  hosts: "platform_installer"
+  become: true
+
+  tasks:
+
+    - name: "Load the vault variables"
+      connection: local
+      ansible.builtin.include_vars:
+        file: "{{ vault_path }}"
+
+    - name: "Load the other variables"
+      connection: local
+      when: vars_file is defined or vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir | default(omit) }}"
+        file: "{{ vars_file | default(omit) }}"
+
+    - name: "Download and run the platform installer"
+      ansible.builtin.include_role:
+        name: platform
+      tags:
+        - tags_phase_4
+        - tags_platform
+        - tags_platform_installer
+
+- name: "Configure the Ansible Automation Platform"
+  hosts: "platform_installer"
+  become: true
+
+  tasks:
+
+    - name: "Load the vault variables"
+      connection: local
+      ansible.builtin.include_vars:
+        file: "{{ vault_path }}"
+
+    - name: "Load the other variables"
+      connection: local
+      when: vars_file is defined or vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir | default(omit) }}"
+        file: "{{ vars_file | default(omit) }}"
+
+    - name: "Add all AAP Content and Configuration"
+      ansible.builtin.include_role:
+        name: platform_post
+      tags:
+        - tags_phase_4
+        - tags_platform
+        - tags_platform_post
