@@ -8,16 +8,24 @@
   tasks:
 
     - name: "Load the vault variables"
-      connection: local
+      when: vault_path is defined
       ansible.builtin.include_vars:
         file: "{{ vault_path }}"
 
     - name: "Load the other variables"
-      connection: local
-      when: vars_file is defined or vars_dir is defined
+      when: vars_path is defined
       ansible.builtin.include_vars:
-        dir: "{{ vars_dir | default(omit) }}"
-        file: "{{ vars_file | default(omit) }}"
+        file: "{{ vars_path }}"
+
+    - name: "Load the vault variables"
+      when: vault_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vault_dir }}"
+
+    - name: "Load the other variables"
+      when: vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir }}"
 
     - name: "Build the ansible platform nodes"
       ansible.builtin.include_role:
