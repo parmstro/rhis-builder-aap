@@ -325,6 +325,21 @@ projects:
     state: present
     validate_certs: "{{ aap_validate_certs }}"
 
+  - name: "rhis-builder-convert2rhel"
+    organization: "Default"
+    credential: "github_demo"
+    description: "demo convert2RHEL pipeline"
+    default_env: "satellite_ee"
+    scm_type: "git"
+    scm_branch: "develop"
+    scm_clean: true
+    scm_delete_on_update: false
+    scm_track_submodules: false
+    scm_update_on_launch: false
+    scm_url: "https://github.com/parmstro/rhis-builder-convert2rhel.git"
+    state: present
+    validate_certs: "{{ aap_validate_certs }}"
+
 templates:
   - name: "ACM1PublishContent"
     description: "Publish the SOE Content for JBoss, LAMP and Wordpress"
