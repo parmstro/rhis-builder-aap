@@ -81,14 +81,14 @@ credentials:
       url: "https://aaphub24.parmstrong.ca/api/galaxy/content/validated/"
       token: "{{ private_automation_hub24_token_vault }}"
 
-  - name: "github_demo"
+  - name: "ansible_github"
     organization: "Default"
     credential_type: "Source Control"
     description: "rhis_builder demo credential"
     state: present
     inputs:
-      username: "{{ github_demo_username_vault }}"
-      password: "{{ github_demo_gpat_vault }}"
+      username: "{{ ansible_github_username_vault }}"
+      password: "{{ ansible_github_gpat_vault }}"
 
   - name: "default_machine"
     organization: "Default"
@@ -180,6 +180,58 @@ inventories:
     organization: "Default"
     state: present
 
+  - name: "convert2rhel_pipeline_inventory"
+    description: "demo SOE pipeline inventory"
+    organization: "Default"
+    state: present
+    variables:
+      host_platform: "vmware"
+      vmware_datacenter_name: "{{ vmware_datacenter_name_vault }}"
+      vmware_vcenter_hostname: "{{ vmware_vcenter_hostname_vault }}"
+      vmware_vcenter_username: "{{ vmware_vcenter_username_vault }}"
+      vmware_vcenter_password: "{{ vmware_vcenter_password_vault }}"
+      vmware_validate_certs: false
+
+      disk_search_pattern: "sd.*"
+
+      snapshot_disk_size_gb: "100"
+      snapshot_disk_provision_type: "thin"
+      snapshot_disk_datastore: "NAS1_VMS"
+      snapshot_disk_state: "present"
+      snapshot_disk_controller: 0
+      snapshot_disk_unit: 42
+      snapshot_disk_scsi_type: "paravirtual"
+      snapshot_disk_mode: "persistent"
+
+      snapshot_create_set_name: "c2r"
+      snapshot_revert_set_name: "c2r"
+      snapshot_remove_set_name: "c2r"
+
+      snapshot_create_snapshot_autoextend_threshold: 70
+      snapshot_create_snapshot_autoextend_percent: 20
+      snapshot_create_boot_backup: true
+      # we don't want to snap log volumes or audit volumes
+      # as they will have interesting data
+      snapshot_create_volumes:
+        - vg: vg_root
+          lv: lv_root
+          size: 10G
+        - vg: vg_root
+          lv: lv_var
+          size: 10G
+        - vg: vg_root
+          lv: lv_home
+          size: 1G
+        - vg: vg_root
+          lv: lv_var_log
+          size: 1G
+        - vg: vg_root
+          lv: lv_var_audit
+          size: 1G
+        - vg: vg_root
+          lv: lv_var_tmp
+          size: 1G
+
 inventory_sources:
   - name: "sat6.parmstrong.ca"
     credential: "prod_satellite"
@@ -223,6 +275,7 @@ static_hosts:
       compute_profile: "SOE_Medium"
       mac: "00:50:56:ff:ff:ff"
       dhostname: ""
+
   - name: "testlamp2.parmstrong.ca"
     description: "LAMP stack SOE test host"
     enabled: true
@@ -236,6 +289,7 @@ static_hosts:
       compute_profile: "SOE_Medium"
       mac: "00:50:56:ff:ff:ff"
       dhostname: ""
+
   - name: "testwordpress2.parmstrong.ca"
     description: "Wordpress SOE test host"
     enabled: true
@@ -250,6 +304,71 @@ static_hosts:
       mac: "00:50:56:ff:ff:ff"
       dhostname: ""
 
+  - name: "centosdemo1.parmstrong.ca"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "centosdemo1.parmstrong.ca"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_centos79_vm"
+      compute_resource: "vcenter.parmstrong.ca"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"
+
+  - name: "centosdemo2.parmstrong.ca"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "centosdemo2.parmstrong.ca"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_centos79_vm"
+      compute_resource: "vcenter.parmstrong.ca"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"
+
+  - name: "oeldemo1.parmstrong.ca"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "oeldemo1.parmstrong.ca"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_oel79_vm"
+      compute_resource: "vcenter.parmstrong.ca"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"
+
+  - name: "oeldemo2.parmstrong.ca"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "oeldemo2.parmstrong.ca"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_oel79_vm"
+      compute_resource: "vcenter.parmstrong.ca"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"
+
+
 static_groups:
   - name: "JBoss"
     description: "Main group for JBoss test servers"
@@ -257,36 +376,42 @@ static_groups:
       - "testjboss2.parmstrong.ca"
     inventory: "SOE_pipeline_inventory"
     state: present
+
   - name: "LAMP"
     description: "Main group for LAMP stack test servers"
     hosts:
       - "testlamp2.parmstrong.ca"
     inventory: "SOE_pipeline_inventory"
     state: present
+
   - name: "dbservers"
     description: "Installer group for database servers in LAMP stack test"
     hosts:
       - "testlamp2.parmstrong.ca"
     inventory: "SOE_pipeline_inventory"
     state: present
+
   - name: "webservers"
     description: "Installer group for web servers in LAMP stack test"
     hosts:
       - "testlamp2.parmstrong.ca"
     inventory: "SOE_pipeline_inventory"
     state: present
+
   - name: "WordPress"
     description: "Main group for WordPress servers"
     hosts:
       - "testwordpress2.parmstrong.ca"
     inventory: "SOE_pipeline_inventory"
     state: present
+
   - name: "wordpressserver"
     description: "Installer group for WordPress servers"
     hosts:
       - "testwordpress2.parmstrong.ca"
     inventory: "SOE_pipeline_inventory"
     state: present
+
   - name: "controller"
     description: "The automation controller"
     hosts:
@@ -294,10 +419,36 @@ static_groups:
     inventory: "TheAutomationController"
     state: present
 
+  - name: "centos"
+    description: "Main group for centos test servers"
+    hosts:
+      - "centosdemo1.parmstrong.ca"
+      - "centosdemo2.parmstrong.ca"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
+  - name: "oel"
+    description: "Main group for centos test servers"
+    hosts:
+      - "oeldemo1.parmstrong.ca"
+      - "oeldemo2.parmstrong.ca"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
+  - name: "cconvert2rhel"
+    description: "Main group for convert2rhel test servers"
+    hosts:
+      - "centosdemo1.parmstrong.ca"
+      - "centosdemo2.parmstrong.ca"
+      - "oeldemo1.parmstrong.ca"
+      - "oeldemo2.parmstrong.ca"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
 projects:
   - name: "rhis-builder-day-2-ops"
     organization: "Default"
-    credential: "github_demo"
+    credential: "ansible_github"
     description: "various Day 2 Operations automations"
     default_env: "satellite_ee"
     scm_type: "git"
@@ -312,7 +463,7 @@ projects:
 
   - name: "rhis-builder-pipelines"
     organization: "Default"
-    credential: "github_demo"
+    credential: "ansible_github"
     description: "demo SOE pipeline"
     default_env: "satellite_ee"
     scm_type: "git"
@@ -327,11 +478,11 @@ projects:
 
   - name: "rhis-builder-convert2rhel"
     organization: "Default"
-    credential: "github_demo"
+    credential: "ansible_github"
     description: "demo convert2RHEL pipeline"
     default_env: "satellite_ee"
     scm_type: "git"
-    scm_branch: "develop"
+    scm_branch: "main"
     scm_clean: true
     scm_delete_on_update: false
     scm_track_submodules: false
@@ -1038,7 +1189,268 @@ templates:
       sysmessage_type: "base"
       time_timedaemon: "chrony"
       time_timeservers:
-        - "time.parmstrong.ca"
+        - "time1.parmstrong.ca"
         - "time2.parmstrong.ca"
         - "time3.parmstrong.ca"
       time_timezone: "America/Toronto"
+
+  - name: "c2r_deploy_test_servers"
+    description: "Deploy convert2RHEL test machines to Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "TheAutomationController"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee"
+    playbook: "create_hosts.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      host_build_comment: "Created by ansible for convert2RHEL demo"
+      deploy: true
+      post_deploy_timeout: 600  # seconds
+      use_sync_build: false
+      enable_debug_logging: false
+      satellite_validate_certs: true
+      platform_hosts:
+        - fqdn: "centosdemo1.parmstrong.ca"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_centos79_vm"
+          compute_resource: "vcenter.parmstrong.ca"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+        - fqdn: "centosdemo2.parmstrong.ca"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_centos79_vm"
+          compute_resource: "vcenter.parmstrong.ca"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+        - fqdn: "oeldemo1.parmstrong.ca"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_oel79_vm"
+          compute_resource: "vcenter.parmstrong.ca"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+        - fqdn: "oeldemo2.parmstrong.ca"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_oel79_vm"
+          compute_resource: "vcenter.parmstrong.ca"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+  - name: "c2r_analyze"
+    description: "Run convert2RHEL analyze step on test machines in Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_analyze"
+      analysis_convert2rhel_preconv_opts: "--els"
+      analysis_convert2rhel_eus: "false"
+      common_convert2rhel_repo_satellite: "true"
+      # these are required but may be empty strings
+      rhsm_username: ""
+      rhsm_password: ""
+      rhsm_org: ""
+      rhsm_activation_key: ""
+
+  - name: "c2r_convert"
+    description: "Run convert2RHEL convert step test machines to Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_convert"
+      common_convert2rhel_repo_satellite: "true"
+      convert_convert2rhel_opts: "--els"
+      convert_reboot_requested: "true"
+      # these are required but may be empty strings
+      rhsm_username: ""
+      rhsm_password: ""
+      rhsm_org: ""
+      rhsm_activation_key: ""
+
+  - name: "c2r_preconvert_remediate"
+    description: "Run pre-conversion remediation steps on test machines in Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_preconvert_remediate"
+
+  - name: "c2r_post_remediate"
+    description: "Run post conversion remediation on convert2RHEL test machines in Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_post_remediate"
+
+  - name: "c2r_post_validate"
+    description: "Validate that convert2RHEL test machines in Development function and are running the new OS"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_post_validate"
+      validate_convert2rhel_target_release: "7.9"
+
+  - name: "c2r_prereq_cdn"
+    description: "Configure convert2RHEL prerequisites fo test machines registered to the Red Hat CDN"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_prereq_cdn"
+
+  - name: "c2r_Prereq_SAT"
+    description: "Configure convert2RHEL prerequisites for test machines registered to Red Hat Satellite"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_prereq_sat"
+      centos_host_pre_convert_sat_activationkey: "convertCentOS2RHEL7"
+      centos_host_pre_convert_sat_org_id: "Default_Organization"
+      oel_host_pre_convert_sat_activationkey: "convertOEL2RHEL7"
+      oel_host_pre_convert_sat_org_id: "Default_Organization"
+
+  - name: "c2r_snapshot_cleanup"
+    description: "Cleanup LVM snapshot configuration on hosts - remove snapshot disks etc.."
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_cleanup"
+
+  - name: "c2r_snapshot_create"
+    description: "Create the LVM snapshot on hosts"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_create"
+
+  - name: "c2r_snapshot_prepare"
+    description: "Prepare host for the LVM snapshot - ensure disk space, etc."
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_prepare"
+
+  - name: "c2r_snapshot_remove"
+    description: "Commit the changes by removing the LVM snapshot from the host"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_remove"
+
+  - name: "c2r_snapshot_revert"
+    description: "Revert the system to the stored LVM snapshot for the host"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_revert"
