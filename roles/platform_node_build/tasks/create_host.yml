@@ -2,12 +2,24 @@
 # Create the host based on the parameters
 - name: "Set deployment defaults"
   ansible.builtin.set_fact:
-    target_mac: '{{ host.mac | default("ff:ff:ff:ff:ff:ff") }}'
     target_compute_resource: "{{ host.compute_resource }}"
+
+- name: "Set deployment defaults"
+  when: host.interfaces_attributes is defined
+  ansible.builtin.set_fact:
+    target_mac: '{{ host.interfaces_attributes[0].mac | lower | default("ff:ff:ff:ff:ff:ff") }}'
+
+- name: "Set deployment defaults"
+  when: host.interfaces_attributes is not defined
+  ansible.builtin.set_fact:
+    target_mac: '{{ host.mac | default("ff:ff:ff:ff:ff:ff") }}'
+
+- name: "Log the target mac address"
+  ansible.builtin.debug:
+    var: target_mac
 
 - name: "A baremetal deployment has been requested. Gathering discovered host information."
   when: host.compute_resource == "baremetal"
-  connection: local
   block:
     - name: "Set deployment defaults"
       ansible.builtin.set_fact:
@@ -16,14 +28,15 @@
     - name: "Get info on discovered hosts that meet criteria"
       ansible.builtin.include_tasks: "get_foreman_list.yml"
       vars:
-        gfl_sat_username: "{{ satellite_admin_username }}"
-        gfl_sat_password: "{{ satellite_admin_password }}"
-        gfl_sat_server_url: "{{ satellite_server_url }}"
-        gfl_sat_validate_certs: "{{ satellite_validate_certs }}"
-        gfl_sat_organization: "{{ host.organization | default(omit) }}"
-        gfl_sat_params: "{{ host.params | default(omit) }}"
-        gfl_sat_resource: "{{ discovered_hosts_resource }}"
-        gfl_sat_search_string: "{{ host.search | default(default_search_string) }}"
+        gfl_satellite_username: "{{ satellite_username | default(omit) }}"
+        gfl_satellite_password: "{{ satellite_password | default(omit) }}"
+        gfl_satellite_use_gssapi: "{{ satellite_use_gssapi | default(omit) }}"
+        gfl_satellite_server_url: "{{ satellite_url }}"
+        gfl_satellite_validate_certs: "{{ satellite_validate_certs }}"
+        gfl_satellite_organization: "{{ host.organization | default(omit) }}"
+        gfl_satellite_params: "{{ host.params | default(omit) }}"
+        gfl_satellite_resource: "{{ discovered_hosts_resource }}"
+        gfl_satellite_search_string: "{{ host.search | default(default_search_string) }}"
 
     - name: "Get the returned resources"
       ansible.builtin.set_fact:
@@ -49,7 +62,7 @@
 
         - name: "Filter the results for available nics"
           when:
-            - host.compute_resource == "baremetal" and (host.mac == "ff:ff:ff:ff:ff:ff" or host.mac is not defined)
+            - host.compute_resource == "baremetal" and (host.interfaces_attributes[0].mac == "ff:ff:ff:ff:ff:ff" or host.interfaces_attributes[0].mac is not defined) # noqa yaml[line-length]
             - host.req_nic_count and current_host.nic_count > host.req_nic_count
           ansible.builtin.set_fact:
             has_nics: true
@@ -58,7 +71,7 @@
             loop_var: targethost
           register: available_hosts
 
-        - name: "Select the first available host"
+        - name: "Select the first available discovered host"
           ansible.builtin.set_fact:
             target: "{{ available_hosts.results | json_query('[].targethost.ansible_facts') | list | first }}"
 
@@ -73,40 +86,66 @@
           ansible.builtin.fail:
             msg: "There are no discovered hosts that meet the criteria"
 
-- name: "Deploy the host"
-  connection: local
+- name: "Update the compute attributes"
+  ansible.builtin.set_fact:
+    create_host_compute_attributes: "{{ host.compute_attributes | default({}) | combine({'start': '1'}) }}"
+
+- name: "Deploy the host - {{ host.fqdn }}"
   redhat.satellite.host:
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
-    server_url: "{{ satellite_server_url }}"
+    username: "{{ satellite_username | default(omit) }}"
+    password: "{{ satellite_password | default(omit) }}"
+    use_gssapi: "{{ satellite_use_gssapi | default(omit) }}"
+    server_url: "{{ satellite_url }}"
     organization: "{{ host.organization }}"
     location: "{{ host.location }}"
     name: "{{ host.fqdn }}"
-    comment: "{{ host.build_comment | default(omit) }}"
-    hostgroup: "{{ host.hostgroup }}"
-    kickstart_repository: "{{ host.kickstart_repository | default(omit) }}"
-    compute_resource: "{{ target_compute_resource | default(omit) }}"
-    compute_profile: "{{ host.compute_profile | default(omit) }}"
-    mac: "{{ target_mac }}"
     build: true
     state: present
+    activation_keys: "{{ host.activation_keys | default(omit) }}"
+    architecture: "{{ host.architecture | default(omit) }}"
+    ca_path: "{{ host.ca_path | default(omit) }}"
+    comment: "{{ host.comment | default(omit) }}"
+    compute_attributes: "{{ create_host_compute_attributes }}"
+    compute_profile: "{{ host.compute_profile | default(omit) }}"
+    compute_resource: "{{ target_compute_resource | default(omit) }}"
+    config_groups: "{{ host.config_groups | default(omit) }}"
+    content_source: "{{ host.content_source | default(omit) }}"
+    content_view: "{{ host.content_view | default(omit) }}"
+    domain: "{{ host.domain | default(omit) }}"
+    hostgroup: "{{ host.hostgroup | default(omit) }}"
+    image: "{{ host.image | default(omit) }}"
+    interfaces_attributes: "{{ host.interfaces_attributes | default(omit) }}"
+    ip: "{{ host.ip | default(omit) }}"
+    kickstart_repository: "{{ host.kickstart_repository | default(omit) }}"
+    lifecycle_environment: "{{ host.lifecycle_environment | default(omit) }}"
+    mac: "{{ host.mac | default(omit) }}"
+    medium: "{{ host.medium | default(omit) }}"
+    openscap_proxy: "{{ host.openscap_proxy | default(omit) }}"
+    operatingsystem: "{{ host.operatingsystem | default(omit) }}"
+    owner: "{{ host.owner | default(omit) }}"
+    owner_group: "{{ host.owner_group | default(omit) }}"
+    ptable: "{{ host.ptable | default(omit) }}"
+    parameters: "{{ host.parameters | default(omit) }}"
+    pxe_loader: "{{ host.pxe_loader | default(omit) }}"
+    realm: "{{ host.realm | default(omit) }}"
+    root_pass: "{{ host.root_pass | default(omit) }}"  # careful with that axe Eugene!
+    subnet: "{{ host.subnet | default(omit) }}"
+    subnet6: "{{ host.subnet6 | default(omit) }}"
     validate_certs: "{{ satellite_validate_certs }}"
-    compute_attributes:
-      start: "1"
   register: deploy_response
 
-- name: "The result of the deployment operation was:"
+- name: "The result of the deployment operation for {{ host.fqdn }}:"
   ansible.builtin.debug:
     var: deploy_response
 
-- name: "Restart the host"
+- name: "Restart the host - {{ host.fqdn }}"
   when: host.compute_resource == "baremetal"
-  connection: local
   ansible.builtin.uri:
-    url: "{{ satellite_server_url }}/api/v2/discovered_hosts/{{ target_name }}/reboot"
+    url: "{{ satellite_url }}/api/v2/discovered_hosts/{{ target_name }}/reboot"
     method: PUT
-    user: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
+    user: "{{ satellite_username | default(omit) }}"
+    password: "{{ satellite_password | default(omit) }}"
+    use_gssapi: "{{ satellite_use_gssapi | default(omit) }}"
     force_basic_auth: true
     validate_certs: "{{ satellite_validate_certs }}"
     status_code: 200
@@ -115,20 +154,19 @@
       Accept: :application/json,version=2
   register: restart_response
 
-- name: "The result of the baremetal reboot operation was:"
+- name: "The result of the baremetal reboot operation for - {{ host.fqdn }}"
   when: host.compute_resource == "baremetal"
-  connection: local
   ansible.builtin.debug:
     var: restart_response
 
 - name: "A baremetal deployment was requested - removing the discovered host entry"
   when: host.compute_resource == "baremetal"
-  connection: local
   ansible.builtin.uri:
-    url: "{{ satellite_server_url }}/api/v2/discovered_hosts/{{ target_name }}"
+    url: "{{ satellite_url }}/api/v2/discovered_hosts/{{ target_name }}"
     method: DELETE
-    user: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
+    user: "{{ satellite_username | default(omit) }}"
+    password: "{{ satellite_password | default(omit) }}"
+    use_gssapi: "{{ satellite_use_gssapi | default(omit) }}"
     force_basic_auth: true
     validate_certs: "{{ satellite_validate_certs }}"
     status_code: 200
@@ -139,6 +177,15 @@
 
 - name: "The result of the discovered host removal operation was:"
   when: host.compute_resource == "baremetal"
-  connection: local
   ansible.builtin.debug:
     var: remove_response
+
+- name: "Update hosts being built list"
+  when: deploy_response.changed and not deploy_response.failed
+  ansible.builtin.set_fact:
+    hosts_to_monitor: "{{ hosts_to_monitor | default([]) + [{'fqdn': host.fqdn}] }}"
+
+- name: "Will monitor host list"
+  when: hosts_to_monitor is defined
+  ansible.builtin.debug:
+    var: hosts_to_monitor

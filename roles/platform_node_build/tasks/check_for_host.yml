@@ -1,12 +1,31 @@
 ---
 
-- name: "Check if the host exists and is reachable"
-  connection: local
-  block:
+- name: "Assume the host does not exist"
+  ansible.builtin.set_fact:
+    host_exists: false
 
-    - name: "Assume the host does not exist"
-      ansible.builtin.set_fact:
-        host_exists: false
+- name: "Is the host in the process of being built?"
+  ansible.builtin.include_tasks: "get_foreman_list.yml"
+  vars:
+    gfl_satellite_username: "{{ satellite_username | default(omit) }}"
+    gfl_satellite_password: "{{ satellite_password | default(omit) }}"
+    gfl_satellite_use_gssapi: "{{ satellite_use_gssapi | default(omit) }}"
+    gfl_satellite_server_url: "{{ satellite_url }}"
+    gfl_satellite_validate_certs: "{{ satellite_validate_certs }}"
+    gfl_satellite_organization: "{{ host.organization | default(omit) }}"
+    gfl_satellite_params: "{{ host.params | default(omit) }}"
+    gfl_satellite_resource: "hosts"
+    gfl_satellite_search_string: "name = {{ host.fqdn }}"  # " and build_status = pending"
+
+- name: "If we found our host we find out host"
+  when: (gfl_resources | length) > 0
+  ansible.builtin.set_fact:
+    host_exists: true
+
+
+- name: "Check if the host exists and is reachable"
+  when: not host_exists
+  block:
 
     - name: "Can we resolve the host?"
       ansible.builtin.assert:

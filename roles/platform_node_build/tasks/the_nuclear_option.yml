@@ -6,7 +6,13 @@
 # commented out for safety reasons
 
 # - name: "Launch the command"
+#   when:
+#     - ansible_fqdn != '.parmstrong.ca'
+#     - ansible_fqdn != 'rme3.parmstrong.ca'
+#     - ansible_fqdn != 'sat6.parmstrong.ca'
+#     - ansible_fqdn != 'idm5.parmstrong.ca'
+#     - ansible_fqdn != 'idm6.parmstrong.ca'
 #   ansible.builtin.shell:
-#     cmd: 'dd if=/dev/zero of=/dev/sda bs=1M count=4096;dd if=/dev/zero of=/dev/sdb bs=1M count=4096;sync;shutdown -r +1;'
+#      cmd: 'dd if=/dev/zero of=/dev/sda bs=1M count=4096;dd if=/dev/zero of=/dev/sdb bs=1M count=4096;sync;shutdown -r +1;'
 #   register: result
 #   changed_when: result.rc == 0
