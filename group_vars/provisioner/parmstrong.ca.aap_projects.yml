@@ -1,0 +1,47 @@
+---
+
+projects:
+  - name: "rhis-builder-day-2-ops"
+    organization: "Default"
+    credential: "ansible_github"
+    description: "various Day 2 Operations automations"
+    default_env: "satellite_ee"
+    scm_type: "git"
+    scm_branch: "main"
+    scm_clean: true
+    scm_delete_on_update: false
+    scm_track_submodules: false
+    scm_update_on_launch: false
+    scm_url: "https://github.com/parmstro/rhis-builder-day-2-ops.git"
+    state: present
+    validate_certs: "{{ aap_validate_certs }}"
+
+  - name: "rhis-builder-pipelines"
+    organization: "Default"
+    credential: "ansible_github"
+    description: "demo SOE pipeline"
+    default_env: "satellite_ee"
+    scm_type: "git"
+    scm_branch: "develop"
+    scm_clean: true
+    scm_delete_on_update: false
+    scm_track_submodules: false
+    scm_update_on_launch: false
+    scm_url: "https://github.com/parmstro/rhis-builder-pipelines.git"
+    state: present
+    validate_certs: "{{ aap_validate_certs }}"
+
+  - name: "rhis-builder-convert2rhel"
+    organization: "Default"
+    credential: "ansible_github"
+    description: "demo convert2RHEL pipeline"
+    default_env: "satellite_ee"
+    scm_type: "git"
+    scm_branch: "main"
+    scm_clean: true
+    scm_delete_on_update: false
+    scm_track_submodules: false
+    scm_update_on_launch: false
+    scm_url: "https://github.com/parmstro/rhis-builder-convert2rhel.git"
+    state: present
+    validate_certs: "{{ aap_validate_certs }}"

@@ -1,0 +1,77 @@
+---
+
+static_groups:
+  - name: "JBoss"
+    description: "Main group for JBoss test servers"
+    hosts:
+      - "testjboss2.parmstrong.ca"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "LAMP"
+    description: "Main group for LAMP stack test servers"
+    hosts:
+      - "testlamp2.parmstrong.ca"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "dbservers"
+    description: "Installer group for database servers in LAMP stack test"
+    hosts:
+      - "testlamp2.parmstrong.ca"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "webservers"
+    description: "Installer group for web servers in LAMP stack test"
+    hosts:
+      - "testlamp2.parmstrong.ca"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "WordPress"
+    description: "Main group for WordPress servers"
+    hosts:
+      - "testwordpress2.parmstrong.ca"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "wordpressserver"
+    description: "Installer group for WordPress servers"
+    hosts:
+      - "testwordpress2.parmstrong.ca"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "controller"
+    description: "The automation controller"
+    hosts:
+      - "aapcontroller24.parmstrong.ca"
+    inventory: "TheAutomationController"
+    state: present
+
+  - name: "centos"
+    description: "Main group for centos test servers"
+    hosts:
+      - "centosdemo1.parmstrong.ca"
+      - "centosdemo2.parmstrong.ca"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
+  - name: "oel"
+    description: "Main group for centos test servers"
+    hosts:
+      - "oeldemo1.parmstrong.ca"
+      - "oeldemo2.parmstrong.ca"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
+  - name: "cconvert2rhel"
+    description: "Main group for convert2rhel test servers"
+    hosts:
+      - "centosdemo1.parmstrong.ca"
+      - "centosdemo2.parmstrong.ca"
+      - "oeldemo1.parmstrong.ca"
+      - "oeldemo2.parmstrong.ca"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
