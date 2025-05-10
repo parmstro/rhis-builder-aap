@@ -1,33 +1,21 @@
 [provisioner]
-rme2.parmstrong.ca
+provisioner.example.ca
 
 [platform_installer]
-aapcontroller1.parmstrong.ca
+aapcontroller1.example.ca
 
 [controllers]
-aapcontroller1.parmstrong.ca
+aapcontroller1.example.ca
 
 [hubs]
-aaphub1.parmstrong.ca
+aaphub1.example.ca
 
 [aapdbs]
-aapdb.parmstrong.ca
+aapdb.example.ca
 
 [edacontrollers]
-aapedacontroller.parmstrong.ca
+aapedacontroller.example.ca
 
 [gateways]
-aapgateway1.parmstrong.ca
+aapgateway1.example.ca
 
-[endpoints]
-maurice1.parmstrong.ca
-maurice2.parmstrong.ca
-
-[nuclear_option]
-aapcontroller1.parmstrong.ca
-aaphub1.parmstrong.ca
-aapdb.parmstrong.ca
-aapedacontroller.parmstrong.ca
-aapgateway1.parmstrong.ca
-maurice1.parmstrong.ca
-maurice2.parmstrong.ca

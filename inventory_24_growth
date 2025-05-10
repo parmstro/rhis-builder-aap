@@ -1,14 +1,14 @@
 [provisioner]
-rme2.parmstrong.ca
+provisoner.example.ca
 
 [platform_installer]
-aapcontroller24.parmstrong.ca
+aapcontroller24.example.ca
 
 [controllers]
-aapcontroller24.parmstrong.ca
+aapcontroller24.example.ca
 
 [hubs]
-aaphub24.parmstrong.ca
+aaphub24.example.ca
 
 [aapdbs]
 
