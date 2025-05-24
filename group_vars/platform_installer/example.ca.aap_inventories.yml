@@ -34,8 +34,8 @@ inventories:
       host_platform: "vmware"
       satellite_username: '{{ satellite_username_vault }}'
       satellite_password: '{{ satellite_password_vault }}'
-      satellite_organization: '{{ satellite_organization_vault }}'
-      satellite_location: '{{ satellite_location_vault }}'
+      satellite_organization: '{{ satellite_initial_organization }}'
+      satellite_location: '{{ satellite_initial_location }}'
       vmware_datacenter_name: '{{ vmware_datacenter_name_vault }}'
       vmware_vcenter_hostname: '{{ vmware_vcenter_hostname_vault }}'
       vmware_vcenter_username: '{{ vmware_vcenter_username_vault }}'

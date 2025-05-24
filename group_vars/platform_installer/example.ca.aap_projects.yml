@@ -27,7 +27,7 @@ projects:
     description: "demo SOE pipeline"
     default_env: "satellite_ee"
     scm_type: "git"
-    scm_branch: "develop"
+    scm_branch: "main"
     scm_clean: true
     scm_delete_on_update: false
     scm_track_submodules: false

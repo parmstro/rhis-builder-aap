@@ -2,14 +2,14 @@
 # this controls our build in Satellite
 
 satellite_fqdn: "satellite.{{ _global_domain_name }}"
-satellite_admin_username: "{{ satellite_admin_username_vault }}"
-satellite_admin_password: "{{ satellite_admin_password_vault }}"
+satellite_username: "{{ satellite_admin_username_vault }}"
+satellite_password: "{{ satellite_admin_password_vault }}"
 satellite_initial_location: "Default Location"
 satellite_initial_organization: "Default Organization"
 satellite_location: "{{ satellite_initial_location }}"
 satellite_organization: "{{ satellite_initial_organization }}"
 satellite_domain: "{{ _global_domain_name }}"
-satellite_server_url: "https://{{ satellite_fqdn }}"
+satellite_url: "https://{{ satellite_fqdn }}"
 satellite_validate_certs: true
 
 search_dh_mac: "ff:ff:ff:ff:ff:ff"
@@ -35,7 +35,6 @@ _default_child_iface2: "enp2s0f1"
 
 # _default_bond_vlan_tag_meta: "940"
 
-
 # Ansible 2.4 growth deployment
 platform_hosts:
   - fqdn: "aapcontroller24.{{ _global_domain_name }}"
@@ -54,8 +53,8 @@ platform_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:d2"
-        ip: "192.168.140.13"
+        mac: "54:b2:03:f1:0b:6a"
+        ip: "192.168.140.14"
 
 
   - fqdn: "aaphub24.{{ _global_domain_name }}"
@@ -74,8 +73,8 @@ platform_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:6a"
-        ip: "192.168.140.14"
+        mac: "54:b2:03:f1:0b:46"
+        ip: "192.168.140.15"
 
 # AAP 2.5 Growth Deployment
 # platform_hosts:
@@ -95,8 +94,8 @@ platform_hosts:
 #         primary: true
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
-#         mac: "54:b2:03:f1:0b:d2"
-#         ip: "192.168.140.13"
+#         mac: ""
+#         ip: "192.168.140.14"
 #   - fqdn: "aaphub1.{{ _global_domain_name }}"
 #     delete_host: false
 #     organization: "Default Organization"
@@ -113,8 +112,8 @@ platform_hosts:
 #         primary: true
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
-#         mac: "54:b2:03:f1:0b:6a"
-#         ip: "192.168.140.14"
+#         mac: ""
+#         ip: "192.168.140.15"
 #   - fqdn: "aapdb.{{ _global_domain_name }}"
 #     delete_host: false
 #     organization: "Default Organization"
@@ -122,8 +121,17 @@ platform_hosts:
 #     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
 #     compute_resource: "vcenter.{{ _global_domain_name }}"
-#     mac: "00:50:56:ff:ff:ff"
-#     ip: "192.168.140.15"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.16"
 #   - fqdn: "aapgateway1.{{ _global_domain_name }}"
 #     delete_host: false
 #     organization: "Default Organization"
@@ -131,8 +139,17 @@ platform_hosts:
 #     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
 #     compute_resource: "vcenter.{{ _global_domain_name }}"
-#     mac: "00:50:56:ff:ff:ff"
-#     ip: "192.168.140.16"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.17"
 #   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
 #     delete_host: false
 #     organization: "Default Organization"
@@ -140,5 +157,14 @@ platform_hosts:
 #     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
 #     compute_resource: "vcenter.{{ _global_domain_name }}"
-#     mac: "00:50:56:ff:ff:ff"
-#     ip: "192.168.140.17"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.18"
