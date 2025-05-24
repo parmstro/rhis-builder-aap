@@ -6,3 +6,4 @@
   loop: "{{ projects }}"
   loop_control:
     loop_var: project
+  no_log: true

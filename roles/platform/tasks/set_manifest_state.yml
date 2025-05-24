@@ -1,0 +1,13 @@
+---
+
+# Set the basic manifest state - present or absent
+- name: "Set the manifest state"
+  redhat.satellite.redhat_manifest:
+    portal: "{{ redhat_manifest.portal_url }}"
+    username: "{{ redhat_manifest.cdn_username }}"
+    password: "{{ redhat_manifest.cdn_password }}"
+    name: "{{ redhat_manifest.name }}"
+    state: "{{ redhat_manifest.state }}"
+    content_access_mode: "{{ redhat_manifest.content_access_mode | default(omit) }}"
+    validate_certs: "{{ redhat_manifest.validate_certs }}"
+  register: result

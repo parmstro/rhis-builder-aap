@@ -42,17 +42,26 @@
 
   tasks:
 
+
     - name: "Load the vault variables"
-      connection: local
+      when: vault_path is defined
       ansible.builtin.include_vars:
         file: "{{ vault_path }}"
 
     - name: "Load the other variables"
-      connection: local
-      when: vars_file is defined or vars_dir is defined
+      when: vars_path is defined
       ansible.builtin.include_vars:
-        dir: "{{ vars_dir | default(omit) }}"
-        file: "{{ vars_file | default(omit) }}"
+        file: "{{ vars_path }}"
+
+    - name: "Load the vault variables"
+      when: vault_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vault_dir }}"
+
+    - name: "Load the other variables"
+      when: vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir }}"
 
     - name: "Set up the prerequesites for the nodes"
       ansible.builtin.include_role:
@@ -68,17 +77,26 @@
 
   tasks:
 
+
     - name: "Load the vault variables"
-      connection: local
+      when: vault_path is defined
       ansible.builtin.include_vars:
         file: "{{ vault_path }}"
 
     - name: "Load the other variables"
-      connection: local
-      when: vars_file is defined or vars_dir is defined
+      when: vars_path is defined
       ansible.builtin.include_vars:
-        dir: "{{ vars_dir | default(omit) }}"
-        file: "{{ vars_file | default(omit) }}"
+        file: "{{ vars_path }}"
+
+    - name: "Load the vault variables"
+      when: vault_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vault_dir }}"
+
+    - name: "Load the other variables"
+      when: vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir }}"
 
     - name: "Download and run the platform installer"
       ansible.builtin.include_role:
@@ -95,16 +113,24 @@
   tasks:
 
     - name: "Load the vault variables"
-      connection: local
+      when: vault_path is defined
       ansible.builtin.include_vars:
         file: "{{ vault_path }}"
 
     - name: "Load the other variables"
-      connection: local
-      when: vars_file is defined or vars_dir is defined
+      when: vars_path is defined
       ansible.builtin.include_vars:
-        dir: "{{ vars_dir | default(omit) }}"
-        file: "{{ vars_file | default(omit) }}"
+        file: "{{ vars_path }}"
+
+    - name: "Load the vault variables"
+      when: vault_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vault_dir }}"
+
+    - name: "Load the other variables"
+      when: vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir }}"
 
     - name: "Add all AAP Content and Configuration"
       ansible.builtin.include_role:

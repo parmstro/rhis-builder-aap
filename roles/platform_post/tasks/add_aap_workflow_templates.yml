@@ -6,3 +6,4 @@
   loop: "{{ workflow_templates }}"
   loop_control:
     loop_var: workflow
+  no_log: true

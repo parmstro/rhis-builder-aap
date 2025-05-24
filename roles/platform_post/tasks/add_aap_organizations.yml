@@ -1,0 +1,11 @@
+---
+
+# This tasks creates/updates the organizations
+# typically adding our collection sources
+
+- name: "Add the organizations to the controller"
+  ansible.builtin.include_tasks: "ensure_aap_organization.yml"
+  loop: "{{ aap_organizations }}"
+  loop_control:
+    loop_var: organization
+  # no_log: true

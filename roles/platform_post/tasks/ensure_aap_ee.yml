@@ -47,7 +47,7 @@
     username: "{{ aap_platform_username }}"
     password: "{{ aap_platform_password }}"
     push_args:
-      dest: "{{ groups['hubs'][0] }}"
+      dest: "{{ groups['hubs'][0] }}/{{ ee.name }}"
       remove_signatures: true
 
 - name: "Clean up the deployment directory"

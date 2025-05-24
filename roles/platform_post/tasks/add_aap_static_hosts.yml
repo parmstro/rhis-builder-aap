@@ -6,3 +6,4 @@
   loop: "{{ static_hosts }}"
   loop_control:
     loop_var: host
+  no_log: true

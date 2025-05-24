@@ -22,9 +22,10 @@
 
 - name: "Download the subscriptions manifest"
   ansible.builtin.include_tasks:
-    file: "fetch_manifest.yml"
+    file: "ensure_redhat_manifest.yml"
 
 - name: "Add the subscriptions to the controller"
+  when: platform_topology != "standalone_hub"
   ansible.builtin.include_tasks:
     file: "add_aap_manifest.yml"
 

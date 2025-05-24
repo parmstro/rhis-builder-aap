@@ -6,3 +6,4 @@
   loop: "{{ inventory_sources }}"
   loop_control:
     loop_var: inventory_source
+  no_log: true

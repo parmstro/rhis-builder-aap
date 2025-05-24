@@ -1,0 +1,24 @@
+---
+
+- name: "Ensure that organization {{ organization.name }} is {{ organization.state }}"  # noqa name[template]
+  ansible.controller.organization:
+    controller_host: "{{ aap_platform_host }}"
+    controller_username: "{{ aap_platform_username }}"
+    controller_password: "{{ aap_platform_password }}"
+    controller_config_file: "{{ aap_controller_config_file | default(omit) }}"
+    controller_oauthtoken: "{{ aap_controller_oauthtoken | default(omit) }}"
+    custom_virtualenv: "{{ organization.custom_virtualenv | default(omit) }}"
+    default_environment: "{{ organization.default_environment | default(omit) }}"
+    description: "{{ organization.description | default(omit) }}"
+    galaxy_credentials: "{{ organization.galaxy_credentials | default(omit) }}"
+    instance_groups: "{{ organization.instance_groups | default(omit) }}"
+    max_hosts: "{{ organization.max_hosts | default(omit) }}"
+    name: "{{ organization.name }}"
+    new_name: "{{ organization.new_name | default(omit) }}"
+    notification_templates_approvals: "{{ organization.notification_templates_approvals | default(omit) }}"
+    notification_templates_error: "{{ organization.notification_templates_error | default(omit) }}"
+    notification_templates_started: "{{ organization.notification_templates_started | default(omit) }}"
+    notification_templates_success: "{{ organization.notification_templates_success | default(omit) }}"
+    request_timeout: "{{ organization.request_timeout | default(omit) }}"
+    state: "{{ organization.state | default(present) }}"
+    validate_certs: "{{ aap_validate_certs }}"

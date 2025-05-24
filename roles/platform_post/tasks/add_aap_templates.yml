@@ -6,3 +6,4 @@
   loop: "{{ templates }}"
   loop_control:
     loop_var: template
+  # no_log: true
