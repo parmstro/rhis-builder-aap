@@ -1,5 +1,5 @@
 [provisioner]
-rme2.example.ca
+provisioner.example.ca
 
 [platform_installer]
 aaphub24.example.ca
