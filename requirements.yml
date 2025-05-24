@@ -2,7 +2,7 @@
 # These are the collections required by the builder
 collections:
   - name: "ansible.controller"
-    version: "4.5.7"
+    version: "4.5.21"
   - name: "ansible.netcommon"
   - name: "ansible.posix"
   - name: "ansible.utils"
@@ -16,4 +16,3 @@ collections:
   - name: "redhat.satellite"
   - name: "redhat.satellite_operations"
   - name: "redhat.redhat_csp_download"
-
