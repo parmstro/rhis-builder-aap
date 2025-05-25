@@ -43,7 +43,7 @@
 
 # Add the demo templates for callback and pipeline
 - name: "Add AAP templates"
-  ansible.builtin.include_tasks: "add_aap_templates.yml"
+  ansible.builtin.include_tasks: "add_aap_templates_list.yml"
 
 # Add the pipeline workflow template
 - name: "Add AAP workflows"

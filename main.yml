@@ -6,7 +6,6 @@
   become: true
 
   tasks:
-
     - name: "Load the vault variables"
       when: vault_path is defined
       ansible.builtin.include_vars:
@@ -41,8 +40,6 @@
   become: true
 
   tasks:
-
-
     - name: "Load the vault variables"
       when: vault_path is defined
       ansible.builtin.include_vars:
@@ -76,8 +73,6 @@
   become: true
 
   tasks:
-
-
     - name: "Load the vault variables"
       when: vault_path is defined
       ansible.builtin.include_vars:
@@ -111,7 +106,6 @@
   become: true
 
   tasks:
-
     - name: "Load the vault variables"
       when: vault_path is defined
       ansible.builtin.include_vars:

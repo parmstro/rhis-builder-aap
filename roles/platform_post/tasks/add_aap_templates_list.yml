@@ -1,0 +1,8 @@
+---
+# This tasks goes through the list of templates
+
+- name: "Process the list of template lists"
+  ansible.builtin.include_tasks: "add_aap_templates.yml"
+  loop: "{{ templates_list }}"
+  loop_control:
+    loop_var: templates

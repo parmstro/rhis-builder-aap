@@ -1,6 +1,6 @@
 ---
 
-convert_2_rhel_templates:
+templates_convert_2_rhel:
   - name: "c2r_deploy_test_servers"
     description: "Deploy convert2RHEL test machines to Development"
     job_type: "run"
@@ -83,6 +83,22 @@ convert_2_rhel_templates:
       rhsm_password: ""
       rhsm_org: ""
       rhsm_activation_key: ""
+
+  - name: "c2r_report_export"
+    description: "Export the c2r analysis report for splunk"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_report_export"
+      report_directory: "/tmp/c2r_reports/"
 
   - name: "c2r_convert"
     description: "Run convert2RHEL convert step test machines to Development"
@@ -168,7 +184,7 @@ convert_2_rhel_templates:
     variables:
       role_name: "c2r_prereq_cdn"
 
-  - name: "c2r_Prereq_SAT"
+  - name: "c2r_prereq_sat"
     description: "Configure convert2RHEL prerequisites for test machines registered to Red Hat Satellite"
     job_type: "run"
     organization: "Default"
