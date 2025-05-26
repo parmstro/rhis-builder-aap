@@ -9,3 +9,4 @@ templates_list:
   - "{{ templates_convert_2_rhel }}"
   - "{{ templates_default_monthly_publish }}"
   - "{{ templates_soe_ansible_callback }}"
+  - "{{ templates_soe_imagebuilder }}"

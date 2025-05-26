@@ -120,7 +120,7 @@ platform_hosts:
 #     location: "Default Location"
 #     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
-#     compute_resource: "vcenter.{{ _global_domain_name }}"
+#     compute_resource: "VMware_Lab"
 #     interfaces_attributes:
 #       - type: "interface"
 #         identifier: "{{ _default_provision_iface }}"
@@ -138,7 +138,7 @@ platform_hosts:
 #     location: "Default Location"
 #     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
-#     compute_resource: "vcenter.{{ _global_domain_name }}"
+#     compute_resource: "VMware_Lab"
 #     interfaces_attributes:
 #       - type: "interface"
 #         identifier: "{{ _default_provision_iface }}"
@@ -156,7 +156,7 @@ platform_hosts:
 #     location: "Default Location"
 #     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
-#     compute_resource: "vcenter.{{ _global_domain_name }}"
+#     compute_resource: "VMware_Lab"
 #     interfaces_attributes:
 #       - type: "interface"
 #         identifier: "{{ _default_provision_iface }}"
