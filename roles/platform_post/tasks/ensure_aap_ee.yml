@@ -44,11 +44,12 @@
   containers.podman.podman_image:
     name: "{{ ee.name }}"
     push: true
-    username: "{{ aap_platform_username }}"
-    password: "{{ aap_platform_password }}"
+    username: "{{ aap_admin_username }}"
+    password: "{{ aap_admin_password }}"
     push_args:
-      dest: "{{ groups['hubs'][0] }}/{{ ee.name }}"
+      destination: "{{ groups['hubs'][0] }}/{{ ee.name }}:latest"
       remove_signatures: true
+    validate_certs: false
 
 - name: "Clean up the deployment directory"
   ansible.builtin.file:
