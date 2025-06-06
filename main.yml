@@ -1,5 +1,18 @@
 ---
 # we are building all hosts with satellite compute resources
+- name: "Configure the ansible environment"
+  hosts: provisioner
+  become: true
+  gather_facts: true
+
+  tasks:
+
+    - name: "Update collections"
+      ansible.builtin.command: "ansible-galaxy collection install -r {{ playbook_dir }}/requirements.yml"
+      register: result
+      changed_when: result.rc == 0
+      tags:
+        - tags_init
 
 - name: "Create hosts"
   hosts: provisioner
@@ -101,7 +114,7 @@
         - tags_platform
         - tags_platform_installer
 
-- name: "Configure the Ansible Automation Platform"
+- name: "Configure the Ansible Automation Platform Controller"
   hosts: "platform_installer"
   become: true
 
@@ -127,6 +140,7 @@
         dir: "{{ vars_dir }}"
 
     - name: "Add all AAP Content and Configuration"
+      when: groups['controllers'] | length > 0
       ansible.builtin.include_role:
         name: platform_post
       tags:
