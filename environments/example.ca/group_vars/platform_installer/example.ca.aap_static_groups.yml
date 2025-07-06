@@ -55,7 +55,7 @@ static_groups:
     description: "An alias for the automation controller"
     hosts:
       - "aapcontroller24.{{ _global_domain_name }}"
-    inventory: "TheAutomationController"
+    inventory: "TheProvisioner"
     state: present
 
 # c2r demo pipeline static groups

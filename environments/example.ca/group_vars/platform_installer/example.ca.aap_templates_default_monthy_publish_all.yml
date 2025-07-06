@@ -5,7 +5,7 @@ templates_default_monthly_publish:
     description: "Publish all SOE Content"
     job_type: "run"
     organization: "Default"
-    inventory: "TheAutomationController"
+    inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
     execution_environment: "satellite_ee"
     playbook: "publish_only.yml"
