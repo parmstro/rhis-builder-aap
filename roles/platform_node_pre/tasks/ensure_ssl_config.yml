@@ -148,7 +148,7 @@
   ansible.builtin.assert:
     that: cert_hash.stdout == key_hash.stdout
 
-- name: Pausing
+- name: Pausing one minute for replication
   ansible.builtin.wait_for:
     timeout: 60
 
