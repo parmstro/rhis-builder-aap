@@ -25,7 +25,11 @@
       ansible.builtin.set_fact:
         software_baseurl: "{{ result.repository.full_path }}"
 
-    - name: "Get the name of the bundle file"
+    - name: "Fetching from repository:"
+      ansible.builtin.debug:
+        var: result.repository.full_path
+
+    - name: "Get the name of the bundle file "
       redhat.satellite.resource_info:
         username: "{{ satellite_admin_username }}"
         password: "{{ satellite_admin_password }}"
@@ -39,6 +43,10 @@
     - name: "Set the download checksum"
       ansible.builtin.set_fact:
         sha256sum: "{{ files.resources[0].checksum }}"
+
+    - name: "The expected checksum is:"
+      ansible.builtin.debug:
+        var: files.resources[0]
 
     - name: "Set the path for the download"
       ansible.builtin.set_fact:
@@ -70,6 +78,11 @@
       register: download_sum
       changed_when: download_sum.rc == 0
 
+    - name: "The download checksum is:"
+      ansible.builtin.debug:
+        var: download_sum
+
     - name: "Validate the checksum"
+      when: sha256sum != ""
       ansible.builtin.assert:
         that: download_sum.stdout[:64] == sha256sum
