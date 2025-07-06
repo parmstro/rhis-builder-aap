@@ -9,7 +9,7 @@
 #   when:
 #     - ansible_fqdn != '.parmstrong.ca'
 #     - ansible_fqdn != 'rme3.parmstrong.ca'
-#     - ansible_fqdn != 'sat6.parmstrong.ca'
+#     - ansible_fqdn != 'satellite1.parmstrong.ca'
 #     - ansible_fqdn != 'idm5.parmstrong.ca'
 #     - ansible_fqdn != 'idm6.parmstrong.ca'
 #   ansible.builtin.shell:
