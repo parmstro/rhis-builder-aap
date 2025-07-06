@@ -1,0 +1,34 @@
+---
+
+# entry point for hub configuration
+# basic config only at this point.
+
+- name: "Ensure collection remotes"
+  when: hub_collection_remotes is defined and (hub_collection_remotes | length) > 0
+  ansible.builtin.include_tasks: "ensure_collection_remotes.yml"
+  loop: "{{ hub_collection_remotes }}"
+  loop_control:
+    loop_var: hub_collection_remote
+  tags:
+    - hub_post_collection_remotes
+    - hub_post
+
+- name: "Ensure collection repositories"
+  when: hub_collection_repositories is defined and (hub_collection_repositories | length) > 0
+  ansible.builtin.include_tasks: "ensure_collection_repositories.yml"
+  loop: "{{ hub_collection_repositories }}"
+  loop_control:
+    loop_var: hub_collection_repository
+  tags:
+    - hub_post_collection_repositories
+    - hub_post
+
+- name: "Ensure collection repository synchronization"
+  when: hub_collection_repositories is defined and (hub_collection_repositories | length) > 0
+  ansible.builtin.include_tasks: "synchronize_repositories.yml"
+  loop: "{{ hub_collection_repositories }}"
+  loop_control:
+    loop_var: hub_collection_repository
+  tags:
+    - hub_post_collection_synchronization
+    - hub_post

@@ -1,0 +1,22 @@
+---
+
+- name: "Ensure collection remote {{ hub_collection_repository.name }}"
+  ansible.hub.collection_repository:
+    ah_host: "{{ ansible_fqdn }}"
+    ah_path_prefix: "{{ 'galaxy' | default(omit) }}"
+    ah_username: "{{ aap_hub_admin_username }}"
+    ah_password: "{{ aap_hub_admin_password }}"
+    name: "{{ hub_collection_repository.name }}"      # required
+    description: "{{ hub_collection_repository.description }}"
+    distribution: "{{ hub_collection_repository.distribution }}"  # name and state
+    interval: "{{ hub_collection_repository.interval | default(omit) }}"
+    private: "{{ hub_collection_repository.private | default(omit) }}"
+    pulp_labels: "{{ hub_collection_repository.pulp_labels | default(omit) }}"
+    remote: "{{ hub_collection_repository.remote | default(omit) }}"
+    request_timeout: "{{ hub_collection_repository.request_timeout | default(omit) }}"
+    retain_repo_versions: "{{ hub_collection_repository.retain_repo_versions | default(omit) }}"
+    state: "{{ hub_collection_repository.state | default(omit) }}"
+    timeout: "{{ hub_collection_repository.timeout | default(omit) }}"
+    update_repo: "{{ hub_collection_repository.update_repo | default(omit) }}"
+    wait: "{{ hub_collection_repository.wait | default(omit) }}"
+    validate_certs: "{{ aap_hub_validate_certs | default(true) }}"

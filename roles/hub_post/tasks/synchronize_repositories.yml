@@ -1,0 +1,14 @@
+---
+
+- name: "Synchronizing collection repository {{ hub_collection_repository.name }}"
+  ansible.hub.collection_repository:
+    ah_host: "{{ ansible_fqdn }}"
+    ah_path_prefix: "{{ 'galaxy' | default(omit) }}"
+    ah_username: "{{ aap_hub_admin_username }}"
+    ah_password: "{{ aap_hub_admin_password }}"
+    name: "{{ hub_collection_repository.name }}"      # required
+    interval: "{{ hub_collection_repository.interval | default(omit) }}"
+    request_timeout: "{{ hub_collection_repository.request_timeout | default(omit) }}"
+    timeout: "{{ hub_collection_repository.timeout | default(omit) }}"
+    wait: "{{ hub_collection_repository.wait | default(omit) }}"
+    validate_certs: "{{ aap_hub_validate_certs | default(true) }}"

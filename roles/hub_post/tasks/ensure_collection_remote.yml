@@ -1,0 +1,34 @@
+---
+
+
+- name: "Ensure collection remote {{ hub_collection_remote.name }}"
+  ansible.hub.collection_remote:
+    ah_host: "{{ ansible_fqdn }}"
+    ah_path_prefix: "{{ 'galaxy' | default(omit) }}"
+    ah_username: "{{ aap_hub_admin_username }}"
+    ah_password: "{{ aap_hub_admin_password }}"
+    name: "{{ hub_collection_remote.name }}"      # required
+    url: "{{ hub_collection_remote.url }}"        # required
+    auth_url: "{{ hub_collection_remote.auth_url | default(omit) }}"
+    ca_cert: "{{ hub_collection_remote.ca_cert | default(omit) }}"
+    ca_cert_path: "{{ hub_collection_remote.ca_cert_path | default(omit) }}"  # The ca_cert_path local to the executing node
+    client_cert: "{{ hub_collection_remote.client_cert | default(omit) }}"
+    client_cert_path: "{{ hub_collection_remote.client_cert_path | default(omit) }}"          # The client_cert_path to the executing node
+    client_key: "{{ hub_collection_remote.client_key | default(omit) }}"                      # NEVER use this => security hazard
+    client_key_path: "{{ hub_collection_remote.client_key_path | default(omit) }}"
+    download_concurrency: "{{ hub_collection_remote.download_concurrency | default(omit) }}"
+    max_retries: "{{ hub_collection_remote.max_retries | default(omit) }}"
+    policy: "{{ hub_collection_remote.policy | default(omit) }}"                              # like in Satellite immediate / on-demand
+    proxy_password: "{{ hub_collection_remote.proxy_password | default(omit) }}"              # for when the hub pulp instance needs to go through a web proxy
+    proxy_url: "{{ hub_collection_remote.proxy_url | default(omit) }}"              # for when the hub pulp instance needs to go through a web proxy
+    proxy_username: "{{ hub_collection_remote.proxy_username | default(omit) }}"              # for when the hub pulp instance needs to go through a web proxy
+    rate_limit: "{{ hub_collection_remote.rate_limit | default(omit) }}"
+    request_timeout: "{{ hub_collection_remote.request_timeout | default(omit) }}"
+    requirements: "{{ hub_collection_remote.requirements | default(omit) }}"                  # a list of collection requirements
+    requirements_file: "{{ hub_collection_remote.requirements_file | default(omit) }}"        # a file local to the executing node
+    signed_only: "{{ hub_collection_remote.signed_only | default(omit) }}"                    # whether to only download signed collections
+    state: "{{ hub_collection_remote.state | default(omit) }}"                                # absent or defaults to present if omitted
+    sync_dependencies: "{{ hub_collection_remote.sync_dependencies | default(omit) }}"        # false or defaults to true if omitted
+    tls_validation: "{{ hub_collection_remote.tls_validation | default(omit) }}"              # false or defaults to true if omitted
+    token: "{{ hub_collection_remote.token | default(omit) }}"
+    validate_certs: "{{ aap_hub_validate_certs | default(true) }}"
