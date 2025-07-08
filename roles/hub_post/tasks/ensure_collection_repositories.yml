@@ -9,7 +9,7 @@
     name: "{{ hub_collection_repository.name }}"      # required
     description: "{{ hub_collection_repository.description }}"
     distribution: "{{ hub_collection_repository.distribution }}"  # name and state
-    interval: "{{ hub_collection_repository.interval | default(omit) }}"
+    interval: "{{ hub_collection_repository.interval | default(omit) }}"   # how often to poll for a change in the sync status
     private: "{{ hub_collection_repository.private | default(omit) }}"
     pulp_labels: "{{ hub_collection_repository.pulp_labels | default(omit) }}"
     remote: "{{ hub_collection_repository.remote | default(omit) }}"

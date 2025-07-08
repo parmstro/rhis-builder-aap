@@ -1,0 +1,11 @@
+---
+
+- name: "Ensure collection repository synchronization"
+  when: hub_collection_repositories is defined and (hub_collection_repositories | length) > 0
+  ansible.builtin.include_tasks: "synchronize_repositories.yml"
+  loop: "{{ hub_collection_repositories }}"
+  loop_control:
+    loop_var: hub_collection_repository
+  tags:
+    - hub_post_collection_synchronization
+    - hub_post
