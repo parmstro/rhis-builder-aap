@@ -3,7 +3,6 @@
 - name: "Run Role Task"
   hosts: all
   become: true
-  connection: local
   gather_facts: true
 
   tasks:
