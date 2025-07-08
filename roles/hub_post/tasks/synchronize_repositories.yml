@@ -1,7 +1,7 @@
 ---
 
 - name: "Synchronizing collection repository {{ hub_collection_repository.name }}"
-  ansible.hub.collection_repository:
+  ansible.hub.collection_repository_sync:
     ah_host: "{{ ansible_fqdn }}"
     ah_path_prefix: "{{ 'galaxy' | default(omit) }}"
     ah_username: "{{ aap_hub_admin_username }}"
