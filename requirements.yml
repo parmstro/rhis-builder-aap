@@ -16,3 +16,4 @@ collections:
   - name: "redhat.satellite"
   - name: "redhat.satellite_operations"
   - name: "redhat.redhat_csp_download"
+  - name: "ansible.hub"
