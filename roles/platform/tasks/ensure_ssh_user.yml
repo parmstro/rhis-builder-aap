@@ -8,28 +8,30 @@
     state: directory
     owner: "root"
     group: "root"
-    mode: "0600"
+    mode: "0700"    # required .ssh mode
 
 - name: "Copy the builder key to the aap host"
   ansible.builtin.copy:
     src: "{{ builder_key_file_vault }}"
-    dest: "/root/.ssh/id_rsa"
+    dest: "/root/.ssh/rhis_builder_id_rsa"
     owner: "root"
     group: "root"
-    mode: "0600"
+    mode: "0600"    # required ssh key mode
 
 - name: "Copy the builder public key to the aap host"
   ansible.builtin.copy:
     src: "{{ builder_pub_file_vault }}"
-    dest: "/root/.ssh/id_rsa.pub"
+    dest: "/root/.ssh/rhis_builder_id_rsa.pub"
     owner: "root"
     group: "root"
-    mode: "0600"
+    mode: "0600"    # required public key mode
 
 - name: "Create an authorized key file on the aap host"
-  ansible.builtin.copy:
-    src: "{{ builder_authorized_keys_file_vault }}"
-    dest: "/root/.ssh/authorized_keys"
+  ansible.builtin.blockinfile:
+    block: "{{ lookup('file', builder_pub_file_vault) }}"
+    path: "/root/.ssh/authorized_keys"
+    marker: "rhis-builder-aap"
+    state: present
     owner: "root"
     group: "root"
     mode: "0600"
