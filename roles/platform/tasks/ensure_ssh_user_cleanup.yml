@@ -24,7 +24,6 @@
       ansible.builtin.blockinfile:
         block: "{{ lookup('file', builder_pub_file_vault) }}"
         path: "/root/.ssh/authorized_keys"
-        marker: "rhis-builder-aap"
         state: absent
         owner: "root"
         group: "root"
