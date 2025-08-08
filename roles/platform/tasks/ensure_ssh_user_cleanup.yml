@@ -12,12 +12,12 @@
 
     - name: "Remove the private key that we copied"
       ansible.builtin.file:
-        path: "/root/.ssh/rhis_builder_id_rsa"
+        path: "/root/.ssh/rhis_builder_id"
         state: absent
 
     - name: "Remove the public key that we copied"
       ansible.builtin.file:
-        path: "/root/.ssh/rhis_builder_id_rsa.pub"
+        path: "/root/.ssh/rhis_builder_id.pub"
         state: absent
 
     - name: "Create an authorized key file on the aap host"

@@ -13,7 +13,7 @@
 - name: "Copy the builder key to the aap host"
   ansible.builtin.copy:
     src: "{{ builder_key_file_vault }}"
-    dest: "/root/.ssh/rhis_builder_id_rsa"
+    dest: "/root/.ssh/rhis_builder_id"
     owner: "root"
     group: "root"
     mode: "0600"    # required ssh key mode
@@ -21,7 +21,7 @@
 - name: "Copy the builder public key to the aap host"
   ansible.builtin.copy:
     src: "{{ builder_pub_file_vault }}"
-    dest: "/root/.ssh/rhis_builder_id_rsa.pub"
+    dest: "/root/.ssh/rhis_builder_id.pub"
     owner: "root"
     group: "root"
     mode: "0600"    # required public key mode
