@@ -1,4 +1,3 @@
-group_vars/parmstrong*
-host_vars/parmstrong*
+*parmstrong.ca*
 .vscode
 rhis-builder-aap.code_workspace
