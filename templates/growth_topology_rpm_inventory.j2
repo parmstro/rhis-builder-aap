@@ -16,8 +16,8 @@
 # This section is for your automation controller hosts
 # -----------------------------------------------------
 [automationcontroller]
-{% if groups['controllers'] is defined %}
-{% for host in groups['controllers'] %}
+{% if groups['aap_controllers'] is defined %}
+{% for host in groups['aap_controllers'] %}
 {{ host }}
 {% endfor %}
 {% endif %}
@@ -25,8 +25,8 @@
 # This section is for your automation hub hosts
 # -----------------------------------------------------
 [automationhub]
-{% if groups['hubs'] is defined %}
-{% for host in groups['hubs'] %}
+{% if groups['aap_hubs'] is defined %}
+{% for host in groups['aap_hubs'] %}
 {{ host }}
 {% endfor %}
 {% endif %}
@@ -89,7 +89,7 @@ web_server_ssl_key="{{ platform_installer_config.aap_controller_ssl_key }}"
 
 # Automation hub
 # -----------------------------------------------------
-{% if (groups['hubs'] | length) > 0 %}
+{% if (groups['aap_hubs'] | length) > 0 %}
 automationhub_admin_password="{{ platform_installer_config.aap_platform_password }}"
 automationhub_pg_host="{{ platform_installer_config.aap_pg_host }}"
 automationhub_pg_port="{{ platform_installer_config.aap_pg_port }}"

@@ -68,8 +68,8 @@
 # hybrid.example  node_type=hybrid
 # hybrid2.example <- this will default to hybrid
 [automationcontroller]
-{% if groups['controllers'] is defined %}
-{% for host in groups['controllers'] %}
+{% if groups['aap_controllers'] is defined %}
+{% for host in groups['aap_controllers'] %}
 {{ host.fqdn }} node_type={{ host.node_type }}
 {% endfor %}
 {% endif %}

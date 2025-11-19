@@ -12,9 +12,9 @@
 
     - name: "Get the file repository info"
       redhat.satellite.repository_info:
-        username: "{{ satellite_admin_username }}"
-        password: "{{ satellite_admin_password }}"
-        server_url: "{{ satellite_server_url }}"
+        username: "{{ satellite_username }}"
+        password: "{{ satellite_password }}"
+        server_url: "{{ satellite_url }}"
         organization: "{{ satellite_organization }}"
         validate_certs: "{{ satellite_validate_certs }}"
         name: "{{ platform_installer_config.aap_file_repo_name }}"
@@ -31,9 +31,9 @@
 
     - name: "Get the name of the bundle file "
       redhat.satellite.resource_info:
-        username: "{{ satellite_admin_username }}"
-        password: "{{ satellite_admin_password }}"
-        server_url: "{{ satellite_server_url }}"
+        username: "{{ satellite_username }}"
+        password: "{{ satellite_password }}"
+        server_url: "{{ satellite_url }}"
         organization: "{{ satellite_organization }}"
         validate_certs: "{{ satellite_validate_certs }}"
         resource: file_units
@@ -41,10 +41,12 @@
       register: files
 
     - name: "Set the download checksum"
+      when: (files | length) > 0
       ansible.builtin.set_fact:
         sha256sum: "{{ files.resources[0].checksum }}"
 
     - name: "The expected checksum is:"
+      when: (files | length) > 0
       ansible.builtin.debug:
         var: files.resources[0]
 

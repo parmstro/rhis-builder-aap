@@ -47,7 +47,7 @@
     username: "{{ aap_admin_username }}"
     password: "{{ aap_admin_password }}"
     push_args:
-      destination: "{{ groups['hubs'][0] }}/{{ ee.name }}:latest"
+      destination: "{{ groups['aap_hubs'][0] }}/{{ ee.name }}:latest"
       remove_signatures: true
     validate_certs: false
 

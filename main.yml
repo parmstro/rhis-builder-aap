@@ -140,7 +140,7 @@
         dir: "{{ vars_dir }}"
 
     - name: "Add all AAP Content and Configuration"
-      when: groups['controllers'] | length > 0
+      when: groups['aap_controllers'] | length > 0
       ansible.builtin.include_role:
         name: platform_post
       tags:

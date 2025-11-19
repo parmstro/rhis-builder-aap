@@ -7,7 +7,7 @@
   when:
     - platform_deployment_type == "rpm"
   ansible.controller.license:
-    controller_host: "{{ groups['controllers'][0] }}"
+    controller_host: "{{ groups['aap_controllers'][0] }}"
     controller_username: "{{ platform_installer_config.aap_platform_username }}"
     controller_password: "{{ platform_installer_config.aap_platform_password }}"
     manifest: "{{ redhat_manifest.path }}"
