@@ -5,7 +5,7 @@ templates_soe_ansible_callback:
     description: "Satellite build invoked Ansible Callback"
     job_type: "run"
     organization: "Default"
-    inventory: "satellite.{{ _global_domain_name }}"
+    inventory: "{{ groups['sat_primary'][0] }}"
     project: "rhis-builder-day-2-ops"
     execution_environment: "satellite_ee"
     playbook: "post_provisioning_base.yml"

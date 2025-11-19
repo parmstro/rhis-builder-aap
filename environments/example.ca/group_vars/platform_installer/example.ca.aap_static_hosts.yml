@@ -1,7 +1,7 @@
 ---
 
 static_hosts:
-  - name: "satellite.{{ _global_domain_name }}"
+  - name: "{{ groups['sat_primary'][0] }}"
     description: "The satellite server"
     enabled: true
     inventory: "TheSatellite"

@@ -12,14 +12,14 @@
 # for generating system certficates
 # via IdM
 
-satellite_fqdn: "satellite.example.ca"
-satellite_admin_username: "{{ satellite_admin_username_vault }}"
-satellite_admin_password: "{{ satellite_admin_password_vault }}"
+satellite_fqdn: "{{ groups['sat_primary'][0] }}"
+satellite_username: "{{ satellite_username_vault }}"
+satellite_password: "{{ satellite_password_vault }}"
 satellite_initial_location: "Default Location"
 satellite_initial_organization: "Default Organization"
 satellite_location: "{{ satellite_initial_location }}"
 satellite_organization: "{{ satellite_initial_organization }}"
-satellite_domain: "example.ca"
+satellite_domain: "{{ _global_domain_name }}"
 satellite_server_url: "https://{{ satellite_fqdn }}"
 satellite_validate_certs: true
 
@@ -39,8 +39,8 @@ platform_installer_config:
   aap_destination_dir: "/root/ansible_installer"
   # Installer Template
   # All
-  aap_admin_username: "admin"
-  aap_admin_password: "#Legend2013"
+  aap_admin_username: "{{ aap_admin_username_vault }}"
+  aap_admin_password: "{{ aap_admin_password_vault }}"
   aap_custom_ca_crt: "/etc/ipa/ca.crt"
   aap_redis_mode: "standalone"
   # Registry
@@ -55,14 +55,14 @@ platform_installer_config:
   aap_pg_password: "{{ aap_pg_password_vault }}"
   aap_pg_sslmode: "prefer"
   aap_pg_use_ssl: true
-  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['controllers'][0] }}/{{ groups['controllers'][0] }}.crt"
-  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['controllers'][0] }}/{{ groups['controllers'][0] }}.key"
+  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
   # Automation Controller
   aap_controller_verify_ssl: true
-  aap_controller_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['controllers'][0] }}/{{ groups['controllers'][0] }}.crt"
-  aap_controller_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['controllers'][0] }}/{{ groups['controllers'][0] }}.key"
-  aap_web_server_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['controllers'][0] }}/{{ groups['controllers'][0] }}.crt"
-  aap_web_server_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['controllers'][0] }}/{{ groups['controllers'][0] }}.key"
+  aap_controller_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_controller_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
+  aap_web_server_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_web_server_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
 
   aap_platform_username: "{{ aap_admin_username }}"
   aap_platform_password: "{{ aap_admin_password }}"
