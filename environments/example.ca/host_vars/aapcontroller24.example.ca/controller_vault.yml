@@ -1,9 +1,0 @@
-# This file contains the vault secrets for rhis-builder-baremetal-init
-# Any globally necessary vault variables used by rhis-builder-baremetal-init will be noted here
-# and will be located in rhis-builer-vault.ymlncrypted_root_pass_vault: "$y$j9T$A08/Aw3qOlFy4B7yTT1kH1$PHJE4VKrhaFIQdIPGuRcsNSP0Zh7r6ZKdo0AkU4WgU5"
-encrypted_user_pass_vault: ""  # notsecret
-encrypted_grub_pass_vault: "" # noqa yaml[line-length]  notsecret
-user_sudoer_policy_vault: "ansiblerunner  ALL=(ALL) NOPASSWD: ALL"  # notsecret
-builder_key_file_vault: "builder.example.ca.key"  # notsecret
-builder_pub_file_vault: "builder.example.ca.key.pub"  # notsecret
-builder_authorized_keys_file_vault: "builder.example.ca.authorized_keys"  # notsecret
