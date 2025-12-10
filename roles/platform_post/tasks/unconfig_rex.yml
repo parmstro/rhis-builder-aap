@@ -2,12 +2,12 @@
 
 - name: "Read the public keys"
   ansible.builtin.slurp:
-    path: "/root/.ssh/setup_ed25519.pub"
+    path: "/root/.ssh/id_rsa.pub"
   register: remote_public_key
 
 - name: "Add our public key to the authorized key file on the aap host"
   ansible.builtin.blockinfile:
-    block: "{{ remote_public_key }}"
+    block: "{{ remote_public_key.content | b64decode }}"
     path: "/root/.ssh/authorized_keys"
     state: absent
     owner: "root"
@@ -16,6 +16,6 @@
 
 - name: "Delete the setup key pair"
   community.crypto.openssh_keypair:
-    path: "/root/.ssh/ed25519"
+    path: "/root/.ssh/id_rsa"
     type: "ed25519"
     state: absent

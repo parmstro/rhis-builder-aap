@@ -12,7 +12,7 @@
 
 - name: "Create a key pair if required"
   community.crypto.openssh_keypair:
-    path: "/root/.ssh/setup_ed25519"
+    path: "/root/.ssh/id_rsa"
     type: "ed25519"
     state: present
     group: "root"
@@ -21,11 +21,12 @@
 
 - name: "Read the public keys"
   ansible.builtin.slurp:
-    path: "/root/.ssh/setup_ed25519.pub"
+    path: "/root/.ssh/id_rsa.pub"
   register: remote_public_key
 
 # it doesn't really matter if it is an rsa key file or a ed25519 file but the name has to be standard
 # for standard commands to pick it up, using our custom name means we have to pass -i to every ssh call
+# so we are calling the file "/root/.ssh/id_rsa"
 
 # Stat, delete keys, cleanup authorized_keys
 - name: "The .ssh directory should exist"
@@ -44,7 +45,7 @@
 
 - name: "Add our public key to the authorized key file on the aap host"
   ansible.builtin.blockinfile:
-    block: "{{ remote_public_key }}"
+    block: "{{ remote_public_key.content | b64decode }}"
     path: "/root/.ssh/authorized_keys"
     state: present
     owner: "root"
