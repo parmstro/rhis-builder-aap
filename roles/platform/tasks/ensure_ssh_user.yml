@@ -10,23 +10,22 @@
     group: "root"
     mode: "0700"    # required .ssh mode
 
+- name: "Create a key pair if required"
+  community.crypto.openssh_keypair:
+    path: "/root/.ssh/setup_ed25519"
+    type: "ed25519"
+    state: present
+    group: "root"
+    owner: "root"
+    mode: "0600"    # required public key mode
+
+- name: "Read the public keys"
+  ansible.builtin.slurp:
+    path: "/root/.ssh/setup_ed25519.pub"
+  register: remote_public_key
+
 # it doesn't really matter if it is an rsa key file or a ed25519 file but the name has to be standard
 # for standard commands to pick it up, using our custom name means we have to pass -i to every ssh call
-- name: "Copy the builder key to the aap host"
-  ansible.builtin.copy:
-    src: "{{ builder_key_file_vault }}"
-    dest: "/root/.ssh/id_rsa"
-    owner: "root"
-    group: "root"
-    mode: "0600"    # required ssh key mode
-
-- name: "Copy the builder public key to the aap host"
-  ansible.builtin.copy:
-    src: "{{ builder_pub_file_vault }}"
-    dest: "/root/.ssh/id_rsa.pub"
-    owner: "root"
-    group: "root"
-    mode: "0600"    # required public key mode
 
 # Stat, delete keys, cleanup authorized_keys
 - name: "The .ssh directory should exist"
@@ -45,7 +44,7 @@
 
 - name: "Add our public key to the authorized key file on the aap host"
   ansible.builtin.blockinfile:
-    block: "{{ lookup('file', builder_pub_file_vault) }}"
+    block: "{{ remote_public_key }}"
     path: "/root/.ssh/authorized_keys"
     state: present
     owner: "root"
