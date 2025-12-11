@@ -86,8 +86,8 @@
   register: result
   changed_when: result.rc == 0
   loop:
-    - root
-    - {{ rhis_builder_default_user }}
+    - "root"
+    - "{{ rhis_builder_default_user }}"
   loop_control:
     loop_var: current_user
 
