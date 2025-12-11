@@ -1,29 +1,16 @@
 ---
 
-# Stat, delete keys, cleanup authorized_keys
-- name: "The .ssh directory should exist"
-  ansible.builtin.stat:
-    path: "/root/.ssh/"
-  register: stat_result
-
-- name: "Clean it up if it does"
-  when: stat_result.stat.exists
-  block:
-    - name: "Read the public keys"
-      ansible.builtin.slurp:
-        path: "/root/.ssh/id_rsa.pub"
-      register: remote_public_key
-
-    - name: "Remove our public key to the authorized key file on the aap host"
-      ansible.builtin.blockinfile:
-        block: "{{ remote_public_key.content | b64decode }}"
-        path: "{{ user_ssh_authkeys }}"
-        state: absent
-        owner: "root"
-        group: "root"
-        mode: "0600"
-      loop:
-        - "/root/.ssh/authorized_keys"
-        - "/home/{{ ansible_user_id }}/.ssh/authorized_keys"
-      loop_control:
-        loop_var: user_ssh_authkeys
+- name: "Clean installer ssh keys"
+  when: cleanup_installer_keys
+  ansible.builtin.file:
+    path: "{{ current_file }}"
+    state: absent
+  loop:
+    - "/root/.ssh/id_rsa"
+    - "/root/.ssh/id_rsa.pub"
+    - "/root/.ssh/authorized_keys"
+    - "/home/{{ rhis_builder_default_user }}/.ssh/id_rsa"
+    - "/home/{{ rhis_builder_default_user }}/.ssh/id_rsa.pub"
+    - "/home/{{ rhis_builder_default_user }}/.ssh/authorized_keys"
+  loop_control:
+    loop_var: current_file
