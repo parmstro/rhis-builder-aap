@@ -18,11 +18,12 @@
   register: installer_result
   changed_when: installer_result.rc == 0
 
-- name: "Run the AAP rpm based installation"
+- name: "Run the AAP rpm based installation" # noqa command-instead-of-shell
   when:
     - platform_installer_config.deployment_type == "rpm"
-  ansible.builtin.command:
+  ansible.builtin.shell:
     chdir: "{{ aap_installer_inventory_dir }}"
     cmd: "./setup.sh"
   register: installer_result
   changed_when: installer_result.rc == 0
+  become: true
