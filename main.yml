@@ -1,55 +1,7 @@
 ---
-# we are building all hosts with satellite compute resources
-- name: "Configure the ansible environment"
-  hosts: provisioner
-  become: true
-  gather_facts: true
-
-  tasks:
-
-    - name: "Update collections"
-      ansible.builtin.command: "ansible-galaxy collection install -r {{ playbook_dir }}/requirements.yml"
-      register: result
-      changed_when: result.rc == 0
-      tags:
-        - tags_init
-
-- name: "Create hosts"
-  hosts: provisioner
-  become: true
-
-  tasks:
-    - name: "Load the vault variables"
-      when: vault_path is defined
-      ansible.builtin.include_vars:
-        file: "{{ vault_path }}"
-
-    - name: "Load the other variables"
-      when: vars_path is defined
-      ansible.builtin.include_vars:
-        file: "{{ vars_path }}"
-
-    - name: "Load the vault variables"
-      when: vault_dir is defined
-      ansible.builtin.include_vars:
-        dir: "{{ vault_dir }}"
-
-    - name: "Load the other variables"
-      when: vars_dir is defined
-      ansible.builtin.include_vars:
-        dir: "{{ vars_dir }}"
-
-    - name: "Build the ansible platform nodes"
-      ansible.builtin.include_role:
-        name: platform_node_build
-      tags:
-        - tags_phase_4
-        - tags_platform
-        - tags_platform_provisioner
-
 
 - name: "Apply installation prequisites to hosts"
-  hosts: 'all:!provisioner'
+  hosts: 'aap_hosts'
   become: true
 
   tasks:
