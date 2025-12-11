@@ -9,22 +9,21 @@
 - name: "Clean it up if it does"
   when: stat_result.stat.exists
   block:
-
-    - name: "Remove the private key that we copied"
-      ansible.builtin.file:
-        path: "/root/.ssh/id_rsa"
-        state: absent
-
-    - name: "Remove the public key that we copied"
-      ansible.builtin.file:
+    - name: "Read the public keys"
+      ansible.builtin.slurp:
         path: "/root/.ssh/id_rsa.pub"
-        state: absent
+      register: remote_public_key
 
-    - name: "Create an authorized key file on the aap host"
+    - name: "Remove our public key to the authorized key file on the aap host"
       ansible.builtin.blockinfile:
-        block: "{{ lookup('file', builder_pub_file_vault) }}"
-        path: "/root/.ssh/authorized_keys"
+        block: "{{ remote_public_key.content | b64decode }}"
+        path: "{{ user_ssh_authkeys }}"
         state: absent
         owner: "root"
         group: "root"
         mode: "0600"
+      loop:
+        - "/root/.ssh/authorized_keys"
+        - "/home/{{ ansible_user_id }}/.ssh/authorized_keys"
+      loop_control:
+        loop_var: user_ssh_authkeys
