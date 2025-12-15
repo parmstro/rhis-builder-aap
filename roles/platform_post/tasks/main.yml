@@ -7,6 +7,10 @@
   ansible.builtin.include_tasks: "configure_aap_auth.yml"
 
 # Add the credentials
+- name: "Add AAP credential types"
+  ansible.builtin.include_tasks: "add_aap_credential_types.yml"
+
+# Add the credentials
 - name: "Add AAP credentials"
   ansible.builtin.include_tasks: "add_aap_credentials.yml"
 
