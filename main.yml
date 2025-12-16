@@ -1,7 +1,7 @@
 ---
 
 - name: "Apply installation prequisites to hosts"
-  hosts: 'aap_hosts'
+  hosts: "aap_hosts"
   become: true
 
   tasks:
