@@ -1,0 +1,9 @@
+---
+# add a list of credentials to aap
+
+- name: "Add the list of notifications to the Controller"
+  ansible.builtin.include_tasks: "ensure_aap_notification.yml"
+  loop: "{{ aap_notification }}"
+  loop_control:
+    loop_var: notification
+  no_log: true

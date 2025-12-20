@@ -1,0 +1,58 @@
+---
+# This task ensures an notification status
+
+- name: "Ensure the notification template {{ notification.name }} is {{ notification.state }}" # noqa name[template]
+  ansible.controller.notification:
+    controller_host: "{{ aap_platform_host }}"
+    controller_username: "{{ aap_platform_username }}"
+    controller_password: "{{ aap_platform_password }}"
+    description: "{{ notification.description | default(omit) }}"
+    copy_from: "{{ notification.copy_from | default(omit) }}"
+    messages: "{{ notification.messages | default(omit) }}" # custom messages list
+    name: "{{ notification.name }}"
+    new_name: "{{ notification.new_name | default(omit) }}"
+    notification_configuration: "{{ notification.notification_configuration }}"
+    notification_type: "{{ notification.notification_type }}"
+    organization: "{{ notification.organization | default('Default') }}"
+    request_timeout: "{{ notification.request_timeout | default(omit) }}"
+    state: "{{ notification.state | default(present) }}"
+    validate_certs: "{{ aap_validate_certs }}"
+
+## notification_types
+#  - awssns
+#  - email
+#  - grafana
+#  - irc
+#  - mattermost
+#  - pagerduty
+#  - rocketchat
+#  - slack
+#  - twilio
+#  - webhook
+
+## notification_configuration fields
+#  - username (the mail server username)
+#  - sender (the sender email address)
+#  - recipients (the recipients email addresses)
+#  - use_tls (the TLS trigger)
+#  - host (the mail server host)
+#  - use_ssl (the SSL trigger)
+#  - password (the mail server password)
+#  - port (the mail server port)
+#  - channels (the destination Slack channels)
+#  - token (the access token)
+#  - account_token (the Twillio account token)
+#  - from_number (the source phone number)
+#  - to_numbers (the destination phone numbers)
+#  - account_sid (the Twillio account SID)
+#  - subdomain (the PagerDuty subdomain)
+#  - service_key (the PagerDuty service/integration API key)
+#  - client_name (the PagerDuty client identifier)
+#  - message_from (the label to be shown with the notification)
+#  - color (the notification color)
+#  - notify (the notify channel trigger)
+#  - url (the target URL)
+#  - headers (the HTTP headers as JSON string)
+#  - server (the IRC server address)
+#  - nickname (the IRC nickname)
+#  - targets (the destination channels or users)
