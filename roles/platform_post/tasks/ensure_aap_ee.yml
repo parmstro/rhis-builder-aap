@@ -66,8 +66,8 @@
     password: "{{ aap_admin_password }}"
     push_args:
       destination: "{{ groups['aap_hubs'][0] }}/{{ ee.name }}:latest"
-      remove_signatures: true
-    validate_certs: false
+      remove_signatures: "{{ ee.remove_signatures | default(true) }}"
+    validate_certs: "{{ aap_hub_validate_certs | default (false) }}"
 
 - name: "Clean up the deployment directory"
   ansible.builtin.file:
