@@ -20,6 +20,12 @@
     dest: "{{ ee.git_dest }}/{{ ee.name }}/execution-environment.yml"
     mode: "0600"
 
+- name: "Template the requirements.yml"
+  ansible.builtin.template:
+    src: "{{ ee.requirements_template }}"
+    dest: "{{ ee.git_dest }}/{{ ee.name }}/requirements.yml"
+    mode: "0600"
+
 - name: "Get the satellite API certificate"
   ansible.builtin.get_url:
     url: "{{ satellite_server_url }}/pub/katello-server-ca.crt"
