@@ -58,7 +58,23 @@
   register: build_result
   changed_when: build_result.rc == 0
 
+- name: "Set the deployment status"
+  ansible.builtin.set_fact:
+    hub_is_deployed: false
+
+- name: "Check the private automation hub endpoint"
+  ansible.builtin.uri:
+    url: "http://{{ groups['aap_hubs'][0] }}/v2"
+  register: hub_uri_result
+  failed_when: false
+
+- name: "Set the deployment status"
+  when: hub_uri_result.status == 200
+  ansible.builtin.set_fact:
+    hub_is_deployed: true
+
 - name: "Push the finished container to the hub"
+  when: hub_is_deployed
   containers.podman.podman_image:
     name: "{{ ee.name }}"
     push: true
@@ -67,7 +83,7 @@
     push_args:
       destination: "{{ groups['aap_hubs'][0] }}/{{ ee.name }}:latest"
       remove_signatures: "{{ ee.remove_signatures | default(true) }}"
-    validate_certs: "{{ aap_hub_validate_certs | default (false) }}"
+    validate_certs: "{{ aap_hub_validate_certs | default(false) }}"
 
 - name: "Clean up the deployment directory"
   ansible.builtin.file:
