@@ -2,7 +2,7 @@
 
 # This tasks creates the projects
 - name: "Refresh the Anisble Automation Hub offline token" # noqa: command-instead-of-shell
-  ansible.builtin.shell: "{{ automation_hub_token_refresh_cmd_vault }}"
+  ansible.builtin.shell: "{{ redhat_automation_hub_token_refresh_cmd }}"
   register: token_refresh_result
   changed_when: token_refresh_result.rc == 0
 
