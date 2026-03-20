@@ -1,0 +1,33 @@
+- name: "Configure the Ansible Automation Platform Controller"
+  hosts: "platform_installer"
+  become: true
+
+  tasks:
+    - name: "Load the vault variables"
+      when: vault_path is defined
+      ansible.builtin.include_vars:
+        file: "{{ vault_path }}"
+
+    - name: "Load the other variables"
+      when: vars_path is defined
+      ansible.builtin.include_vars:
+        file: "{{ vars_path }}"
+
+    - name: "Load the vault variables"
+      when: vault_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vault_dir }}"
+
+    - name: "Load the other variables"
+      when: vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir }}"
+
+    - name: "Add all AAP Content and Configuration"
+      when: groups['aap_controllers'] | length > 0
+      ansible.builtin.include_role:
+        name: platform_post
+      tags:
+        - tags_phase_4
+        - tags_platform
+        - tags_platform_post
