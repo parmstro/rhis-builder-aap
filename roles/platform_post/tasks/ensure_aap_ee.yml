@@ -40,7 +40,7 @@
 
 - name: "Get the satellite API certificate"
   ansible.builtin.get_url:
-    url: "{{ satellite_server_url }}/pub/katello-server-ca.crt"
+    url: "{{ satellite_url }}/pub/katello-server-ca.crt"
     dest: "{{ ee.git_dest }}/{{ ee.name }}/katello-server-ca.crt"
     mode: "0644"
 
