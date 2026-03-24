@@ -1,10 +1,11 @@
 ---
 
-- name: "Ensure ansible-core"
-  ansible.builtin.dnf:
-    name:
-      - "ansible-core"
-    state: "present"
+# This blows up the installer because core is out of sync with the installed packages
+# - name: "Ensure ansible-core"
+#   ansible.builtin.dnf:
+#     name:
+#       - "ansible-core"
+#     state: "present"
 
 
 - name: "Ensure supporting packages"
