@@ -21,7 +21,10 @@
   no_log: true
 
 - name: "Build the execution environments"
+  when: aap_execution_environments is defined and (aap_execution_environments | length) > 0
   ansible.builtin.include_tasks: "ensure_aap_ee.yml"
-  loop: "{{ exec_envs }}"
+  loop: "{{ aap_execution_environments }}"
   loop_control:
-    loop_var: ee
+    loop_var: aap_execution_environment
+
+...

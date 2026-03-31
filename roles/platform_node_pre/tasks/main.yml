@@ -33,13 +33,11 @@
         loop_var: ssl_config
       no_log: true
 
-# container tools deployment also blows up python :-(
-    # - name: "Ensure the container tools are installed"
-    #   when: platform_deployment_type == "container"
-    #   ansible.builtin.include_tasks: "ensure_container_tools.yml"
-# if needed, deploy this in post
-
     - name: "Ensure the container tools are installed"
+      when: platform_deployment_type == "container"
+      ansible.builtin.include_tasks: "ensure_container_tools.yml"
+
+    - name: "Ensure the package dependencies are installed"
       ansible.builtin.include_tasks: "ensure_packages.yml"
 
     - name: "Ensure cockpit is installed and configured"

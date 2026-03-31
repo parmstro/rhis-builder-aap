@@ -4,7 +4,10 @@
 # it will be a complete settings section vs. a name:value pair
 
 - name: "Configure the authentication server settngs"
+  when: aap_settings is defined and (aap_settings | length) > 0
   ansible.builtin.include_tasks: "ensure_aap_setting.yml"
   loop: "{{ aap_settings }}"
   loop_control:
     loop_var: aap_setting
+
+...

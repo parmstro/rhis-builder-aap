@@ -7,8 +7,11 @@
   changed_when: token_refresh_result.rc == 0
 
 - name: "Add the projects to the controller"
+  when: aap_projects is defined and (aap_projects | length) > 0
   ansible.builtin.include_tasks: "ensure_aap_project.yml"
-  loop: "{{ projects }}"
+  loop: "{{ aap_projects }}"
   loop_control:
-    loop_var: project
+    loop_var: aap_project
   no_log: true
+
+...

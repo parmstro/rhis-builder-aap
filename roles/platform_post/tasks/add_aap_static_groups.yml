@@ -2,8 +2,11 @@
 # This tasks creates the static groups
 
 - name: "Add the static groups to the controller"
+  when: aap_static_groups is defined and (aap_static_groups | length) > 0
   ansible.builtin.include_tasks: "ensure_aap_static_group.yml"
-  loop: "{{ static_groups }}"
+  loop: "{{ aap_static_groups }}"
   loop_control:
-    loop_var: group
+    loop_var: aap_static_group
   no_log: true
+
+...

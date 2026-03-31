@@ -21,3 +21,5 @@
     validate_certs: "{{ aap_validate_certs }}"
   no_log: "{{ aap_setting.no_log | default(false) }}"
   when: aap_setting.settings is defined
+
+...

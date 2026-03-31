@@ -2,8 +2,11 @@
 # This tasks creates the static hosts
 
 - name: "Add the static hosts to the controller"
+  when: aap_static_hosts is defined and (aap_static_hosts | length) > 0
   ansible.builtin.include_tasks: "ensure_aap_static_host.yml"
-  loop: "{{ static_hosts }}"
+  loop: "{{ aap_static_hosts }}"
   loop_control:
-    loop_var: host
+    loop_var: aap_static_host
   no_log: true
+
+...

@@ -2,6 +2,9 @@
 # Run the post build tasks
 # Run and launch from provisioner
 
+- name: "Ensure the container tools are installed"
+  ansible.builtin.include_tasks: "ensure_container_tools.yml"
+
 # Configure AAP Authentication
 - name: "Configure AAP Authentication"
   ansible.builtin.include_tasks: "configure_aap_auth.yml"

@@ -1,21 +1,21 @@
 ---
 # This task ensures an notification status
 
-- name: "Ensure the notification template {{ notification.name }} is {{ notification.state }}" # noqa name[template]
+- name: "Ensure the notification template {{ aap_notification.name }} is {{ aap_notification.state }}" # noqa name[template]
   ansible.controller.notification:
     controller_host: "{{ aap_platform_host }}"
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
-    description: "{{ notification.description | default(omit) }}"
-    copy_from: "{{ notification.copy_from | default(omit) }}"
-    messages: "{{ notification.messages | default(omit) }}" # custom messages list
-    name: "{{ notification.name }}"
-    new_name: "{{ notification.new_name | default(omit) }}"
-    notification_configuration: "{{ notification.notification_configuration }}"
-    notification_type: "{{ notification.notification_type }}"
-    organization: "{{ notification.organization | default('Default') }}"
-    request_timeout: "{{ notification.request_timeout | default(omit) }}"
-    state: "{{ notification.state | default(present) }}"
+    description: "{{ aap_notification.description | default(omit) }}"
+    copy_from: "{{ aap_notification.copy_from | default(omit) }}"
+    messages: "{{ aap_notification.messages | default(omit) }}" # custom messages list
+    name: "{{ aap_notification.name }}"
+    new_name: "{{ aap_notification.new_name | default(omit) }}"
+    notification_configuration: "{{ aap_notification.notification_configuration }}"
+    notification_type: "{{ aap_notification.notification_type }}"
+    organization: "{{ aap_notification.organization | default('Default') }}"
+    request_timeout: "{{ aap_notification.request_timeout | default(omit) }}"
+    state: "{{ aap_notification.state | default(present) }}"
     validate_certs: "{{ aap_validate_certs }}"
 
 ## notification_types
@@ -56,3 +56,5 @@
 #  - server (the IRC server address)
 #  - nickname (the IRC nickname)
 #  - targets (the destination channels or users)
+
+...

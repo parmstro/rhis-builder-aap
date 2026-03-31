@@ -1,60 +1,60 @@
 ---
-# Build and upload an ee
+# Build and upload an execution_environment
 - name: "Create the base directory"
   ansible.builtin.file:
-    path: "{{ ee.git_dest }}"
+    path: "{{ aap_execution_environment.git_dest }}"
     state: directory
     mode: "0644"
 
-- name: "Clone the git repo for the ee"
+- name: "Clone the git repo for the execution_environment"
   ansible.builtin.git:
-    repo: "{{ ee.git_repo }}"
-    version: "{{ ee.git_revision | default(omit) }}"
-    dest: "{{ ee.git_dest }}/{{ ee.name }}"
-    clone: "{{ ee.git_clone | default(omit) }}"
-    force: "{{ ee.git_force | default(omit) }}"
+    repo: "{{ aap_execution_environment.git_repo }}"
+    version: "{{ aap_execution_environment.git_revision | default(omit) }}"
+    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}"
+    clone: "{{ aap_execution_environment.git_clone | default(omit) }}"
+    force: "{{ aap_execution_environment.git_force | default(omit) }}"
 
 - name: "Template the exec_envs definition"
   ansible.builtin.template:
     src: "execution-environment.yml.j2"
-    dest: "{{ ee.git_dest }}/{{ ee.name }}/execution-environment.yml"
+    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/execution-environment.yml"
     mode: "0600"
 
 - name: "Template the ansible requirements.yml"
   ansible.builtin.template:
-    src: "{{ ee.ansible_requirements_template }}"
-    dest: "{{ ee.git_dest }}/{{ ee.name }}/requirements.yml"
+    src: "{{ aap_execution_environment.ansible_requirements_template }}"
+    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/requirements.yml"
     mode: "0600"
 
 - name: "Template the python requirements.txt"
   ansible.builtin.template:
-    src: "{{ ee.python_requirements_template }}"
-    dest: "{{ ee.git_dest }}/{{ ee.name }}/requirements.txt"
+    src: "{{ aap_execution_environment.python_requirements_template }}"
+    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/requirements.txt"
     mode: "0600"
 
 - name: "Template the system requirements bindep.txt"
   ansible.builtin.template:
-    src: "{{ ee.system_requirements_template }}"
-    dest: "{{ ee.git_dest }}/{{ ee.name }}/bindep.txt"
+    src: "{{ aap_execution_environment.system_requirements_template }}"
+    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/bindep.txt"
     mode: "0600"
 
 - name: "Get the satellite API certificate"
   ansible.builtin.get_url:
     url: "{{ satellite_url }}/pub/katello-server-ca.crt"
-    dest: "{{ ee.git_dest }}/{{ ee.name }}/katello-server-ca.crt"
+    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/katello-server-ca.crt"
     mode: "0644"
 
 - name: "Add our ca certficate to the image"
   ansible.builtin.copy:
-    src: "{{ ee.git_dest }}/{{ ee.name }}/katello-server-ca.crt"
-    dest: "{{ ee.git_dest }}/{{ ee.name }}/context"
+    src: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/katello-server-ca.crt"
+    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/context"
     mode: "0644"
     remote_src: true
 
-- name: "Build the ee on the target os"
-  ansible.builtin.command: "ansible-builder build -t {{ ee.name }}"
+- name: "Build the execution_environment on the target os"
+  ansible.builtin.command: "ansible-builder build -t {{ aap_execution_environment.name }}"
   args:
-    chdir: "{{ ee.git_dest }}/{{ ee.name }}"
+    chdir: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}"
   register: build_result
   changed_when: build_result.rc == 0
 
@@ -76,16 +76,18 @@
 - name: "Push the finished container to the hub"
   when: hub_is_deployed
   containers.podman.podman_image:
-    name: "{{ ee.name }}"
+    name: "{{ aap_execution_environment.name }}"
     push: true
     username: "{{ aap_admin_username }}"
     password: "{{ aap_admin_password }}"
     push_args:
-      destination: "{{ groups['aap_hubs'][0] }}/{{ ee.name }}:latest"
-      remove_signatures: "{{ ee.remove_signatures | default(true) }}"
+      destination: "{{ groups['aap_hubs'][0] }}/{{ aap_execution_environment.name }}:latest"
+      remove_signatures: "{{ aap_execution_environment.remove_signatures | default(true) }}"
     validate_certs: "{{ aap_hub_validate_certs | default(false) }}"
 
 - name: "Clean up the deployment directory"
   ansible.builtin.file:
-    path: "{{ ee.git_dest }}/{{ ee.name }}"
+    path: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}"
     state: absent
+
+...

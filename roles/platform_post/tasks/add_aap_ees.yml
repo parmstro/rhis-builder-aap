@@ -2,8 +2,11 @@
 # Build the ansible execution environments.
 
 - name: "Add the execution environments to the controller"
+  when: aap_execution_environments is defined and (aap_execution_environments | length) > 0
   ansible.builtin.include_tasks: "add_ee_to_controller.yml"
-  loop: "{{ exec_envs }}"
+  loop: "{{ aap_execution_environments }}"
   loop_control:
-    loop_var: ee
+    loop_var: aap_execution_environment
   no_log: true
+
+...
