@@ -7,11 +7,11 @@
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
     validate_certs: "{{ aap_validate_certs }}"
-    name: "{{ execution_environment.name }}"
-    image: "{{ execution_environment.image }}"
-    pull: "{{ execution_environment.pull | default(omit) }}"
-    organization: "{{ execution_environment.organization | default(omit) }}"
-    description: "{{ execution_environment.description | default(omit) }}"
-    credential: "{{ execution_environment.credential | default(omit) }}"
+    name: "{{ aap_execution_environment.name }}"
+    image: "{{ aap_execution_environment.image }}"
+    pull: "{{ aap_execution_environment.pull | default(omit) }}"
+    organization: "{{ aap_execution_environment.organization | default(omit) }}"
+    description: "{{ aap_execution_environment.description | default(omit) }}"
+    credential: "{{ aap_execution_environment.credential | default(omit) }}"
 
 ...
