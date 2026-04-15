@@ -29,6 +29,6 @@
   ansible.builtin.include_tasks:
     file: "add_aap_manifest.yml"
 
-- name: "Ensure that the ssh user for installation has access"
+- name: "Ensure ssh user for installation cleanup"
   ansible.builtin.include_tasks:
     file: "ensure_ssh_user_cleanup.yml"
