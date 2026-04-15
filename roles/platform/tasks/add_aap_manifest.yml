@@ -4,8 +4,6 @@
 # API Broken??
 
 - name: "Upload the manifest to the Controller"
-  when:
-    - platform_deployment_type == "rpm"
   ansible.controller.license:
     controller_host: "{{ groups['aap_controllers'][0] }}"
     controller_username: "{{ platform_installer_config.aap_platform_username }}"
