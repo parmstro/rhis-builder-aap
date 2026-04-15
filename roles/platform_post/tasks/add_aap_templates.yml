@@ -8,5 +8,3 @@
   loop_control:
     loop_var: aap_job_template
   no_log: true
-
-...

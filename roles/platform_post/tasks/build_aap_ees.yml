@@ -26,5 +26,3 @@
   loop: "{{ aap_execution_environments }}"
   loop_control:
     loop_var: aap_execution_environment
-
-...

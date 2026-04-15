@@ -9,5 +9,3 @@
   loop: "{{ aap_settings }}"
   loop_control:
     loop_var: aap_setting
-
-...

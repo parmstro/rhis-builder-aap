@@ -13,5 +13,3 @@
   loop_control:
     loop_var: aap_project
   no_log: true
-
-...

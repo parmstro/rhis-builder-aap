@@ -8,5 +8,3 @@
   loop_control:
     loop_var: aap_static_host
   no_log: true
-
-...

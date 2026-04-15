@@ -17,5 +17,3 @@
     state: "{{ aap_static_group.state | default('present') }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     variables: "{{ aap_static_group.variables | default(omit) }}"
-
-...

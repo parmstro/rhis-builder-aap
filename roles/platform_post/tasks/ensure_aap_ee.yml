@@ -89,5 +89,3 @@
   ansible.builtin.file:
     path: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}"
     state: absent
-
-...

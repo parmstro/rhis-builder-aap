@@ -8,5 +8,3 @@
   loop_control:
     loop_var: aap_execution_environment
   no_log: true
-
-...

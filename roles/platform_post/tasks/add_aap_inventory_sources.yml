@@ -8,5 +8,3 @@
   loop_control:
     loop_var: aap_inventory_source
   no_log: true
-
-...

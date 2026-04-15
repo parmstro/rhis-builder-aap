@@ -42,5 +42,3 @@
 #   loop: "{{ workflow.workflow_nodes | reverse }}"
 #   loop_control:
 #     loop_var: workflow_node
-
-...

@@ -17,5 +17,3 @@
     state: "{{ aap_inventory.state | default(present) }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     variables: "{{ aap_inventory.variables | default(omit) }}"
-
-...

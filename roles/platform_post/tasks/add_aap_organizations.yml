@@ -10,5 +10,3 @@
   loop_control:
     loop_var: aap_organization
   no_log: true
-
-...

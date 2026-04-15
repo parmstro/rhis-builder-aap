@@ -8,5 +8,3 @@
   loop_control:
     loop_var: aap_notification
   no_log: true
-
-...

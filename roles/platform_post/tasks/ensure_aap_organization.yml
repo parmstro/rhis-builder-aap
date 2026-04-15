@@ -22,5 +22,3 @@
     request_timeout: "{{ aap_organization.request_timeout | default(omit) }}"
     state: "{{ aap_organization.state | default(present) }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
-
-...

@@ -13,5 +13,3 @@
     organization: "{{ aap_execution_environment.organization | default(omit) }}"
     description: "{{ aap_execution_environment.description | default(omit) }}"
     credential: "{{ aap_execution_environment.credential | default(omit) }}"
-
-...
