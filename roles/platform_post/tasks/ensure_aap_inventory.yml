@@ -15,7 +15,7 @@
     new_name: "{{ aap_inventory.new_name | default(omit) }}"
     organization: "{{ aap_inventory.organization | default('Default') }}"
     state: "{{ aap_inventory.state | default(present) }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     variables: "{{ aap_inventory.variables | default(omit) }}"
 
 ...

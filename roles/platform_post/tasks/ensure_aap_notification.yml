@@ -16,7 +16,7 @@
     organization: "{{ aap_notification.organization | default('Default') }}"
     request_timeout: "{{ aap_notification.request_timeout | default(omit) }}"
     state: "{{ aap_notification.state | default(present) }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
 
 ## notification_types
 #  - awssns

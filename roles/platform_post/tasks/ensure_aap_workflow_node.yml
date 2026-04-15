@@ -23,5 +23,5 @@
     success_nodes: "{{ aap_workflow_node.related.success_nodes | default(omit) }}"
     unified_job_template: "{{ aap_workflow_node.unified_job_template | default(omit) }}"
     workflow_job_template: "{{ aap_workflow.name }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     verbosity: "{{ aap_workflow_node.verbosity | default(omit) }}"

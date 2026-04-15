@@ -21,6 +21,6 @@
     notification_templates_success: "{{ aap_organization.notification_templates_success | default(omit) }}"
     request_timeout: "{{ aap_organization.request_timeout | default(omit) }}"
     state: "{{ aap_organization.state | default(present) }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
 
 ...

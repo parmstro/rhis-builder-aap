@@ -29,7 +29,7 @@
     state: "{{ aap_workflow_template.state }}"
     survey_enabled: "{{ aap_workflow_template.survey_enabled | default(omit) }}"
     survey_spec: "{{ aap_workflow_template.survey_spec | default(omit) }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     webhook_credential: "{{ aap_workflow_template.webhook_credential | default(omit) }}"
     webhook_service: "{{ aap_workflow_template.webhook_service | default(omit) }}"
     workflow_nodes: "{{ aap_workflow_template.workflow_nodes | default(omit) }}"

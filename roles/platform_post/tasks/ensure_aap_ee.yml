@@ -83,7 +83,7 @@
     push_args:
       destination: "{{ groups['aap_hubs'][0] }}/{{ aap_execution_environment.name }}:latest"
       remove_signatures: "{{ aap_execution_environment.remove_signatures | default(true) }}"
-    validate_certs: "{{ aap_hub_validate_certs | default(false) }}"
+    validate_certs: "{{ aap_hub_validate_certs | default(true) }}"
 
 - name: "Clean up the deployment directory"
   ansible.builtin.file:

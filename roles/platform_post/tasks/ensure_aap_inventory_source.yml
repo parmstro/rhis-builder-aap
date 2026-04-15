@@ -22,6 +22,6 @@
     source: "{{ aap_inventory_source.source }}"
     state: "{{ aap_inventory_source.state | default(present) }}"
     update_on_launch: "{{ aap_inventory_source.update_on_launch | default(omit) }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
 
 ...

@@ -25,7 +25,7 @@
     state: "{{ aap_project.state | default(present) }}"
     timeout: "{{ aap_project.timeout | default(omit) }}"
     update_project: "{{ aap_project.update_project | default(omit) }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     wait: "{{ aap_project.wait | default(omit) }}"
 
 ...

@@ -12,7 +12,7 @@
     name: "{{ aap_static_host.name }}"
     new_name: "{{ aap_static_host.new_name | default(omit) }}"
     state: "{{ aap_static_host.state | default('present') }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     variables: "{{ aap_static_host.variables | default(omit) }}"
 
 ...

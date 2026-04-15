@@ -8,8 +8,8 @@
     controller_password: "{{ aap_platform_password }}"
     name: "{{ aap_setting.name }}"
     value: "{{ aap_setting.value }}"
-    validate_certs: "{{ aap_validate_certs }}"
-  no_log: "{{ aap_setting.no_log | default(false) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+  no_log: "{{ aap_setting.no_log | default('false') }}"
   when: aap_setting.settings is not defined
 
 - name: "Apply the setting for {{ aap_setting.name }}"
@@ -18,8 +18,8 @@
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
     settings: "{{ aap_setting.settings }}"
-    validate_certs: "{{ aap_validate_certs }}"
-  no_log: "{{ aap_setting.no_log | default(false) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+  no_log: "{{ aap_setting.no_log | default('false') }}"
   when: aap_setting.settings is defined
 
 ...

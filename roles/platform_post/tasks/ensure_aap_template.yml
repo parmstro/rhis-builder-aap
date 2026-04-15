@@ -51,7 +51,7 @@
     survey_spec: "{{ aap_job_template.survey_spec | default(omit) }}"
     timeout: "{{ aap_job_template.timeout | default(omit) }}"
     use_fact_cache: "{{ aap_job_template.use_fact_cache | default(omit) }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     vault_credential: "{{ aap_job_template.vault_credential | default(omit) }}"
     verbosity: "{{ aap_job_template.verbosity | default(omit) }}"
     webhook_credential: "{{ aap_job_template.webhook_credential | default(omit) }}"

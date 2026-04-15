@@ -6,7 +6,7 @@
     controller_host: "{{ aap_platform_host }}"
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
-    validate_certs: "{{ aap_validate_certs }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ aap_execution_environment.name }}"
     image: "{{ aap_execution_environment.image }}"
     pull: "{{ aap_execution_environment.pull | default(omit) }}"

@@ -6,6 +6,6 @@
     vg: "{{ volume.vg_name }}"
     resizefs: "{{ volume.resize | default(true) }}"
     size: "{{ volume.minimum_size }}"
-    shrink: "{{ volume.shrink | default(false) }}"
+    shrink: "{{ volume.shrink | default('false') }}"
     state: "{{ volume.state }}"
-    force: "{{ volume.force | default(false) }}"
+    force: "{{ volume.force | default('false') }}"
