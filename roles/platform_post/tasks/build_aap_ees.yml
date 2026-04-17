@@ -3,7 +3,7 @@
 # Build the ansible execution environments.
 - name: "Ensure that the ansible rpms are available"
   community.general.rhsm_repository:
-    name: "ansible-automation-platform-2.4-for-rhel-9-x86_64-rpms"
+    name: "ansible-automation-platform-{{ platform_version }}-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
     state: "enabled"
 
 - name: "Ensure that ansible-builder and podman are installed"

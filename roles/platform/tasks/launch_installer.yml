@@ -17,6 +17,7 @@
     cmd: "ansible-playbook -i inventory ansible.containerized_installer.install"
   register: installer_result
   changed_when: installer_result.rc == 0
+  become: false
 
 - name: "Run the AAP rpm based installation" # noqa command-instead-of-shell
   when:
