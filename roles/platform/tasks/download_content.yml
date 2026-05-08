@@ -64,6 +64,7 @@
         state: directory
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
+        recurse: true
         mode: "0755"
 
     - name: "Clean up any failed downloads"
@@ -76,6 +77,15 @@
       ansible.builtin.command: "curl -o {{ platform_installer_config.aap_destination_dir }}/{{ platform_installer_config.aap_bundle_file }} {{ download_path }}"
       register: download_result
       changed_when: download_result.rc == 0
+
+    - name: "Ensure the proper ownship"
+      ansible.builtin.file:
+        path: "{{ platform_installer_config.aap_destination_dir }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        recurse: true
+        mode: "0755"
 
     - name: "Checksum the download"
       ansible.builtin.command: "sha256sum {{ platform_installer_config.aap_destination_dir }}/{{ platform_installer_config.aap_bundle_file }}"

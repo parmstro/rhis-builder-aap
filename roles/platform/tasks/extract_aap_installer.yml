@@ -5,3 +5,6 @@
     src: "{{ platform_installer_config.aap_destination_dir }}/{{ platform_installer_config.aap_bundle_file }}"
     dest: "{{ platform_installer_config.aap_destination_dir }}"
     remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
