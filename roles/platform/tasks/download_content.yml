@@ -62,6 +62,8 @@
       ansible.builtin.file:
         path: "{{ platform_installer_config.aap_destination_dir }}"
         state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
         mode: "0755"
 
     - name: "Clean up any failed downloads"

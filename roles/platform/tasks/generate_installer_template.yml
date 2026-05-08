@@ -11,14 +11,6 @@
     file_type: "directory"
   register: result
 
-- name: "Discover the extracted content directory"
-  when: result.files[0].path == ""
-  ansible.builtin.find:
-    paths: "{{ platform_installer_config.aap_destination_dir }}"
-    pattern: "{{ platform_installer_config.aap_bundle_file[:-7] }}"
-    file_type: "directory"
-  register: result
-
 - name: "Assign the inventory directory name"
   ansible.builtin.set_fact:
     aap_installer_inventory_dir: "{{ result.files[0].path }}"
