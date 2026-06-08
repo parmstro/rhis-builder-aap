@@ -1,9 +1,9 @@
 ---
 # - name: "Ensure the node exists in the workflow"
 #   ansible.controller.workflow_job_template_node:
-#     controller_host: "aapcontroller24.parmstrong.ca"
-#     controller_username: "admin"
-#     controller_password: "#Legend2013"
+#     controller_host: "{{ aap_platform_host }}"
+#     controller_username: "{{ aap_platform_username }}"
+#     controller_password: "{{ aap_platform_password }}"
 #     identifier: "TestNode"
 #     organization: "Default"
 #     unified_job_template: "AMC8FPowerOffTestServers"
@@ -14,9 +14,9 @@
 
 - name: Create a workflow approval node
   ansible.controller.workflow_job_template_node:
-    controller_host: "aapcontroller24.parmstrong.ca"
-    controller_username: "admin"
-    controller_password: "#Legend2013"
+    controller_host: "{{ aap_platform_host }}"
+    controller_username: "{{ aap_platform_username }}"
+    controller_password: "{{ aap_platform_password }}"
     identifier: approval_test
     workflow: "SOE_ContentDeliveryPipeline"
     organization: "Default"
@@ -27,9 +27,9 @@
 
 - name: Connect delete snap to approval node
   ansible.controller.workflow_job_template_node:
-    controller_host: "aapcontroller24.parmstrong.ca"
-    controller_username: "admin"
-    controller_password: "#Legend2013"
+    controller_host: "{{ aap_platform_host }}"
+    controller_username: "{{ aap_platform_username }}"
+    controller_password: "{{ aap_platform_password }}"
     identifier: "DeleteSnapshot"
     workflow: "SOE_ContentDeliveryPipeline"
     organization: "Default"
@@ -40,9 +40,9 @@
 
 - name: Connect delete snap to approval node
   ansible.controller.workflow_job_template_node:
-    controller_host: "aapcontroller24.parmstrong.ca"
-    controller_username: "admin"
-    controller_password: "#Legend2013"
+    controller_host: "{{ aap_platform_host }}"
+    controller_username: "{{ aap_platform_username }}"
+    controller_password: "{{ aap_platform_password }}"
     identifier: "approval_test"
     workflow: "SOE_ContentDeliveryPipeline"
     organization: "Default"
