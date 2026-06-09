@@ -1,3 +1,5 @@
 *parmstrong.ca*
 .vscode
 rhis-builder-aap.code_workspace
+.vscode/
+.claude/
