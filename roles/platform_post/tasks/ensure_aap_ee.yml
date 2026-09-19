@@ -44,12 +44,7 @@
     dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/katello-server-ca.crt"
     mode: "0644"
 
-- name: "Add our ca certficate to the image"
-  ansible.builtin.copy:
-    src: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/katello-server-ca.crt"
-    dest: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}/context"
-    mode: "0644"
-    remote_src: true
+# Build parameters will now pull from the above location - no need to copy
 
 - name: "Build the execution_environment on the target os"
   ansible.builtin.command: "ansible-builder build -t {{ aap_execution_environment.name }}"
