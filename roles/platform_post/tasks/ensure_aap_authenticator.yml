@@ -1,0 +1,23 @@
+---
+# Manage the state of an authentication resource
+
+- name: "Create authenticator - {{ aap_authenticator.name }}"
+  ansible.platform.authenticator:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_username: "{{ aap_platform_username | default(omit) }}"
+    aap_password: "{{ aap_platform_password | default(omit) }}"
+    aap_token: "{{ aap_platform_token | default(omit) }}"
+    aap_request_timeout: "{{ aap_platform_request_timeout | default(omit) }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ aap_authenticator.name }}"
+    new_name: "{{ aap_authenticator.new_name | default(omit) }}"
+    type: "{{ aap_authenticator.type }}"
+    configuration: "{{ aap_authenticator.configuration }}"
+    auto_migrate_users_to: "{{ aap_authenticator.auto_migrate_users_to | default(omit) }}"
+    create_objects: "{{ aap_authenticator.create_objects | default(omit) }}"
+    enabled: "{{ aap_authenticator.enabled | default('true') }}"
+    order: "{{ aap_authenticator.order | default(omit) }}"
+    remove_users: "{{ aap_authenticator.remove_users | default(omit) }}"
+    slug: "{{ aap_authenticator.slug | default(omit) }}"
+    state: "{{ aap_authenticator.state | default('present') }}"
+  no_log: "{{ aap_authenticator.no_log | default('false') }}"

@@ -1,9 +1,11 @@
 ---
 # These are the collections required by the builder
+# We no longer support AAP versions prior to AAP 2.5
+
 collections:
   - name: "ansible.controller"
-    version: "4.5.21"
   - name: "ansible.netcommon"
+  - name: "ansible.platform"
   - name: "ansible.posix"
   - name: "ansible.utils"
   - name: "azure.azcollection"

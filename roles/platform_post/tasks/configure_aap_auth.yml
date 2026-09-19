@@ -1,11 +1,31 @@
 ---
-# configure authentication for our controller instance
-# the authentication settings will be part of the general settings for the server
-# it will be a complete settings section vs. a name:value pair
+# Authentication settings in the latest iteration of AAP
+# are managed through the gateway system
+# The configuration is managed through ansible.platform
+# significantly impacts our schema: see NOTES in rhis-builder-aap
+# configuring all authentication components through a common wrapper
+# for containment.
 
 - name: "Configure the authentication server settngs"
-  when: aap_settings is defined and (aap_settings | length) > 0
-  ansible.builtin.include_tasks: "ensure_aap_setting.yml"
-  loop: "{{ aap_settings }}"
+  when: aap_authenticators is defined and (aap_authenticators | length) > 0
+  ansible.builtin.include_tasks: "ensure_aap_authenticator.yml"
+  loop: "{{ aap_authenticators }}"
   loop_control:
-    loop_var: aap_setting
+    loop_var: aap_authenticator
+  no_log: true
+
+- name: "Configure the authentication server to aap role mappings"
+  when: aap_authenticator_maps is defined and (aap_authenticator_maps | length) > 0
+  ansible.builtin.include_tasks: "ensure_aap_authenticator_map.yml"
+  loop: "{{ aap_authenticator_maps }}"
+  loop_control:
+    loop_var: aap_authenticator_map
+  no_log: true
+
+- name: "Configure the authenticator users (migrate users)"
+  when: aap_authenticator_users is defined and (aap_authenticator_users | length) > 0
+  ansible.builtin.include_tasks: "ensure_aap_authenticator_user.yml"
+  loop: "{{ aap_authenticator_users }}"
+  loop_control:
+    loop_var: aap_authenticator_user
+  no_log: true

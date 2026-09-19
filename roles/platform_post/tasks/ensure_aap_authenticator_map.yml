@@ -1,0 +1,24 @@
+---
+# Apply user identity to role mapping between AAP and the authenticator resource
+
+- name: "Create authenticator identity-role mapping - {{ aap_authenticator_map.name }}"
+  ansible.platform.authenticator_map:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_username: "{{ aap_platform_username | default(omit) }}"
+    aap_password: "{{ aap_platform_password | default(omit) }}"
+    aap_token: "{{ aap_platform_token | default(omit) }}"
+    aap_request_timeout: "{{ aap_platform_request_timeout | default(omit) }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    authenticator: "{{ aap_authenticator_map.authenticator }}"
+    map_type: "{{ aap_authenticator_map.map_type }}"
+    name: "{{ aap_authenticator_map.name }}"
+    new_authenticator: "{{ aap_authenticator_map.new_authenticator | default(omit) }}"
+    new_name: "{{ aap_authenticator_map.new_name | default(omit) }}"
+    order: "{{ aap_authenticator_map.order | default(omit) }}"
+    organization: "{{ aap_authenticator_map.organization | default(omit) }}"
+    revoke: "{{ aap_authenticator_map.revoke | default(omit) }}"
+    role: "{{ aap_authenticator_map.role | default(omit) }}"
+    state: "{{ aap_authenticator_map.state | default('present') }}"
+    team: "{{ aap_authenticator_map.team | default(omit) }}"
+    triggers: "{{ aap_authenticator_map.triggers | default(omit) }}"
+  no_log: "{{ aap_authenticator_map.no_log | default('true') }}"

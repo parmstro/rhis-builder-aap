@@ -1,0 +1,19 @@
+# Generically handle authenticator user queries and migrations
+
+- name: "Ensure the state of authenticator user - {{ aap_authenticator_user.authenticator_user_id }}"
+  ansible.platform.authenticator_user:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_username: "{{ aap_platform_username | default(omit) }}"
+    aap_password: "{{ aap_platform_password | default(omit) }}"
+    aap_token: "{{ aap_platform_token | default(omit) }}"
+    aap_request_timeout: "{{ aap_platform_request_timeout | default(omit) }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    authenticator: "{{ aap_authenticator_user.authenticator }}"
+    authenticator_user_id: "{{ aap_authenticator_user.authenticator_user_id }}"
+    keep_memberships: "{{ aap_autheticator_user.keep_memberships | default(omit) }}"
+    merge_accounts_with_same_id: "{{ aap_authenticator_user.merge_accounts_with_same_id | default(omit) }}"
+    merge_with_user: "{{ aap_authenticator_user.merge_with_user | default(omit) }}"
+    new_uid: "{{ aap_authenticator_user.new_uid | default(omit) }}"
+    remove_other_authenticators: "{{ aap_authenticator_user.remove_other_authenticators | default(omit) }}"
+    state: "{{ aap_authenticator_user.state | default('present') }}"
+  no_log: "{{ aap_authenticator_user.no_log | default('true') }}"
