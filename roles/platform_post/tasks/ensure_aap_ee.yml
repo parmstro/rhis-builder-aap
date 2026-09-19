@@ -47,29 +47,38 @@
 # Build parameters will now pull from the above location - no need to copy
 
 - name: "Build the execution_environment on the target os"
-  ansible.builtin.command: "ansible-builder build -t {{ aap_execution_environment.name }}"
+  ansible.builtin.shell: >
+    ansible-builder build -t {{ aap_execution_environment.name }} > 
+    ~/ansible-builder_{{ aap_execution_environment.name }}-{{ ansible_date_time.iso8601_basic_short }}.log 2>&1
   args:
     chdir: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}"
   register: build_result
   changed_when: build_result.rc == 0
+  ignore_errors: true
+
+- name: "Build Result"
+  ansible.builtin.debug:
+    var: build_result
 
 - name: "Set the deployment status"
+  when: build_result.rc == 0
   ansible.builtin.set_fact:
     hub_is_deployed: false
 
 - name: "Check the private automation hub endpoint"
+  when: build_result.rc == 0
   ansible.builtin.uri:
     url: "http://{{ groups['aap_hubs'][0] }}/v2"
   register: hub_uri_result
   failed_when: false
 
 - name: "Set the deployment status"
-  when: hub_uri_result.status == 200
+  when: build_result.rc == 0 and hub_uri_result.status == 200
   ansible.builtin.set_fact:
     hub_is_deployed: true
 
 - name: "Push the finished container to the hub"
-  when: hub_is_deployed
+  when: build_result.rc == 0 and hub_is_deployed
   containers.podman.podman_image:
     name: "{{ aap_execution_environment.name }}"
     push: true
@@ -81,6 +90,13 @@
     validate_certs: "{{ aap_hub_validate_certs | default(true) }}"
 
 - name: "Clean up the deployment directory"
+  when: build_result.rc == 0
   ansible.builtin.file:
     path: "{{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }}"
     state: absent
+
+- name: "Fail the loop iteration intentionally if the build failed"
+  # 5. Signal a failure state to your overarching play summary *after* steps are processed
+  when: build_result.rc != 0
+  ansible.builtin.fail:
+    msg: "The execution environment build for '{{ aap_execution_environment.name }}' failed. Directory preserved at {{ aap_execution_environment.git_dest }}/{{ aap_execution_environment.name }} for debugging."
