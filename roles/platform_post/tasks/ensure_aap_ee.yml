@@ -68,7 +68,8 @@
 - name: "Check the private automation hub endpoint"
   when: build_result.rc == 0
   ansible.builtin.uri:
-    url: "http://{{ groups['aap_hubs'][0] }}/v2"
+    url: "https://{{ groups['aap_hubs'][0] }}/v2"
+    validate_certs: false
   register: hub_uri_result
   failed_when: false
 
