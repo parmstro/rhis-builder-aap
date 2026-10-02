@@ -3,7 +3,7 @@
 
 - name: "Ensure the inventory {{ aap_inventory.name }} is {{ aap_inventory.state }}" # noqa name[template]
   ansible.controller.inventory:
-    controller_host: "{{ aap_platform_host }}"
+    controller_host: "{{ aap_gateway_host }}"
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
     description: "{{ aap_inventory.description | default(omit) }}"

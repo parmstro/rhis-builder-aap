@@ -2,7 +2,7 @@
 
 - name: "Ensure that organization {{ aap_organization.name }} is {{ aap_organization.state }}"  # noqa name[template]
   ansible.controller.organization:
-    controller_host: "{{ aap_platform_host }}"
+    controller_host: "{{ aap_gateway_host }}"
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
     controller_config_file: "{{ aap_controller_config_file | default(omit) }}"

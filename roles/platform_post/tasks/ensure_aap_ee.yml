@@ -68,7 +68,7 @@
 - name: "Check the private automation hub endpoint"
   when: build_result.rc == 0
   ansible.builtin.uri:
-    url: "https://{{ groups['aap_hubs'][0] }}/v2"
+    url: "https://{{ aap_gateway_host }}/v2"
     validate_certs: false
   register: hub_uri_result
   failed_when: false
@@ -86,7 +86,7 @@
     username: "{{ aap_admin_username }}"
     password: "{{ aap_admin_password }}"
     push_args:
-      destination: "{{ groups['aap_hubs'][0] }}/{{ aap_execution_environment.name }}:latest"
+      destination: "{{ aap_gateway_host }}/{{ aap_execution_environment.name }}"
       remove_signatures: "{{ aap_execution_environment.remove_signatures | default(false) }}"
     tag: "{{ aap_execution_environment.tag }}"
     validate_certs: "{{ aap_hub_validate_certs | default(true) }}"

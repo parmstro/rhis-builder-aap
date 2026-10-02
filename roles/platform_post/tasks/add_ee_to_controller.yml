@@ -3,7 +3,7 @@
 
 - name: "Ensure the EEs are registered on the controller"
   ansible.controller.execution_environment:
-    controller_host: "{{ aap_platform_host }}"
+    controller_host: "{{ aap_gateway_host }}"
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"

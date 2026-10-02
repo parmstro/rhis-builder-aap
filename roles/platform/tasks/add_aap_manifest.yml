@@ -5,7 +5,7 @@
 
 - name: "Upload the manifest to the Controller"
   ansible.controller.license:
-    controller_host: "{{ groups['aap_controllers'][0] }}"
+    controller_host: "{{ aap_gateway_host }}"
     controller_username: "{{ platform_installer_config.aap_platform_username }}"
     controller_password: "{{ platform_installer_config.aap_platform_password }}"
     manifest: "{{ redhat_manifest.path }}"

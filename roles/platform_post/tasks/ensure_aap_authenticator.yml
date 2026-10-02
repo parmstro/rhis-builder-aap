@@ -3,7 +3,7 @@
 
 - name: "Create authenticator - {{ aap_authenticator.name }}"
   ansible.platform.authenticator:
-    aap_hostname: "{{ aap_platform_host }}"
+    aap_hostname: "{{ aap_gateway_host }}"
     aap_username: "{{ aap_platform_username | default(omit) }}"
     aap_password: "{{ aap_platform_password | default(omit) }}"
     aap_token: "{{ aap_platform_token | default(omit) }}"

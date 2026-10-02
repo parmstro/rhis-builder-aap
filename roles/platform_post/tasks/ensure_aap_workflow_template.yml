@@ -3,7 +3,7 @@
 
 - name: "Ensure that workflow {{ aap_workflow_template.name }} is {{ aap_workflow_template.state }}" # noqa: name[template]
   ansible.controller.workflow_job_template:
-    controller_host: "{{ aap_platform_host }}"
+    controller_host: "{{ aap_gateway_host }}"
     controller_username: "{{ aap_platform_username }}"
     controller_password: "{{ aap_platform_password }}"
     allow_simultaneous: "{{ aap_workflow_template.allow_simultaneous | default(omit) }}"
