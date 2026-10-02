@@ -86,7 +86,7 @@
     username: "{{ aap_admin_username }}"
     password: "{{ aap_admin_password }}"
     push_args:
-      destination: "{{ aap_gateway_host }}/{{ aap_execution_environment.name }}"
+      destination: "{{ aap_gateway_host }}{{ '/' ~ aap_execution_environment.repository if aap_execution_environment.repository is defined else '' }}"
       remove_signatures: "{{ aap_execution_environment.remove_signatures | default(false) }}"
     tag: "{{ aap_execution_environment.tag }}"
     validate_certs: "{{ aap_hub_validate_certs | default(true) }}"
