@@ -16,6 +16,10 @@
   ansible.builtin.include_tasks:
     file: "ensure_ssh_user.yml"
 
+- name: "Fetch node certificates to installer"
+  ansible.builtin.include_tasks:
+    file: "fetch_node_crts.yml"
+
 - name: "Launch installer"
   ansible.builtin.include_tasks:
     file: "launch_installer.yml"

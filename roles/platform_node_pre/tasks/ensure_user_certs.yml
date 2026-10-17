@@ -1,0 +1,44 @@
+---
+
+# Copy IdM-issued certificates to the ansible_user home directory so that
+# the AAP containerized installer (which runs as ansible_user) can read them.
+# The originals stay root-owned under /etc/ipa/private/ with restricted access.
+
+- name: "Set user certificate directory path"
+  ansible.builtin.set_fact:
+    l_ssl_user_certs_dir: "/home/{{ ansible_user }}/.ssl/{{ ansible_fqdn }}"
+
+- name: "Create user-accessible certificate directory"
+  ansible.builtin.file:
+    path: "{{ l_ssl_user_certs_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0700"
+
+- name: "Copy certificate to user directory"
+  ansible.builtin.copy:
+    src: "{{ ssl_config.ssl_cert_path }}"
+    dest: "{{ l_ssl_user_certs_dir }}/{{ ansible_fqdn }}.crt"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+    remote_src: true
+
+- name: "Copy private key to user directory"
+  ansible.builtin.copy:
+    src: "{{ ssl_config.ssl_key_path }}"
+    dest: "{{ l_ssl_user_certs_dir }}/{{ ansible_fqdn }}.key"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+    remote_src: true
+
+- name: "Copy CA certificate to user directory"
+  ansible.builtin.copy:
+    src: "{{ ssl_config.ssl_ca_cert_path }}"
+    dest: "{{ l_ssl_user_certs_dir }}/ca.crt"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+    remote_src: true

@@ -1,10 +1,32 @@
 ---
 
-# pull the custom cert directories to the installer system
+# Pull the custom cert directories from AAP nodes to the installer system.
+# Each node's certs live at <base_dir>/<fqdn>/ and are fetched to the
+# user-accessible directory so the installer (running as ansible_user) can
+# read them.
+
+- name: "Ensure user certificate base directory exists on installer"
+  ansible.builtin.file:
+    path: "{{ platform_ssl_certs_user_base_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0700'
+  delegate_to: "{{ groups['platform_installer'][0] }}"
 
 - name: "Fetch the certs from the hosts for the installer"
   ansible.builtin.command:
-    cmd: "scp -r {{ ansible_fqdn }}:/etc/ipa/private/* /etc/ipa/private/"
+    cmd: "scp -r {{ ansible_fqdn }}:{{ platform_ssl_certs_base_dir }}/* {{ platform_ssl_certs_user_base_dir }}/"
   delegate_to: "{{ groups['platform_installer'][0] }}"
   register: result
   changed_when: result.rc == 0
+
+- name: "Set ownership on fetched certificates"
+  ansible.builtin.file:
+    path: "{{ platform_ssl_certs_user_base_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0700'
+    recurse: true
+  delegate_to: "{{ groups['platform_installer'][0] }}"
